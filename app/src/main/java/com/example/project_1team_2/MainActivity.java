@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         click.setOnClickListener(view -> {
             Log.d("TAG", "onCreate: ");
+            Log.d("TAG", "Binh's Try Commit");
         });
 
 
