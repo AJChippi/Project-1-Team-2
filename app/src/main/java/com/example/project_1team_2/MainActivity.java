@@ -17,11 +17,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         click = findViewById(R.id.click);
 
         click.setOnClickListener(view -> {
             Log.d("TAG", "onCreate: ");
         });
+
 
 
     }
