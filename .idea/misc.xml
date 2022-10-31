@@ -3,9 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/rakib/AndroidProjects/GitHub/Project-1-Team-2/app/src/main/res/layout/activity_different_locations.xml" value="0.3625" />
-        <entry key="..\:/Users/rubby/AndroidStudioProjects/Project1Team2/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Users/rubby/AndroidStudioProjects/Project1Team2/app/src/main/res/layout/activity_settings.xml" value="0.35104166666666664" />
+        <entry key="..\:/Classes/Fall2022/CS403-App/Group2Project/Project-1-Team-2/app/src/main/res/layout/activity_main.xml" value="0.67" />
+        <entry key="..\:/Classes/Fall2022/CS403-App/Group2Project/Project-1-Team-2/app/src/main/res/layout/activity_satellite.xml" value="0.27395833333333336" />
       </map>
     </option>
   </component>
