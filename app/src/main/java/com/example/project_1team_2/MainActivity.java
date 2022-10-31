@@ -10,6 +10,10 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     ImageButton settings;
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         txtCondition = findViewById(R.id.txtCondition);
         txtHighToLow = findViewById(R.id.txtHighToLow);
 
-
+        txtDate.setText(new SimpleDateFormat("E, MMM dd, yyyy").format(new Date()));
 
     }
 }
