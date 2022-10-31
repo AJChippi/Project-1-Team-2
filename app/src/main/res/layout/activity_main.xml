@@ -16,15 +16,19 @@
         android:fontFamily="sans-serif-smallcaps"
         android:text="Date"
         android:textColor="#FAECEC"
+
         android:textSize="20sp"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/settings"
+
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
+
         android:backgroundTint="?android:attr/panelBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -55,6 +59,15 @@
         app:layout_constraintTop_toTopOf="@+id/settings"
         app:srcCompat="@android:drawable/btn_star" />
 
+    <ImageButton
+        android:id="@+id/settings2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?android:attr/panelBackground"
+        app:layout_constraintEnd_toStartOf="@+id/settings"
+        app:layout_constraintTop_toTopOf="@+id/settings"
+        app:srcCompat="@android:drawable/ic_menu_manage" />
+
     <TextView
         android:id="@+id/txtLocation"
         android:layout_width="wrap_content"
@@ -75,12 +88,14 @@
         android:layout_marginVertical="16dp"
         android:background="#6B090404"
         android:backgroundTint="#941B0A0A"
+
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center_horizontal"
         android:text="DEGREES"
         android:textColor="#FFFFFF"
         android:textSize="60sp"
         android:textStyle="bold"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtLocation" />
