@@ -22,6 +22,10 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         txtDegree = findViewById(R.id.txtDegree);
         txtCondition = findViewById(R.id.txtCondition);
         txtHighToLow = findViewById(R.id.txtHighToLow);
+
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
                     locationURL,
@@ -120,6 +125,9 @@ public class MainActivity extends AppCompatActivity {
 
             queue.add(request);
 
+
+
+        txtDate.setText(new SimpleDateFormat("E, MMM dd, yyyy").format(new Date()));
 
 
     }
