@@ -23,7 +23,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     @Override
     public LocationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.activity_layout_locations,parent,false);
-        view.setClipToOutline(true);
+        view.setClipToOutline(false);
         return new LocationViewHolder(view);
     }
 

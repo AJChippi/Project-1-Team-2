@@ -6,9 +6,9 @@ public class Locations {
     String forecastInfo;
     double highestTemp;
     double lowestTemp;
-    double temperature;
+    int temperature;
 
-    public Locations(String city, String localTime, String forecastInfo, double highestTemp, double lowestTemp, double temperature) {
+    public Locations(String city, String localTime, String forecastInfo, double highestTemp, double lowestTemp, int temperature) {
         this.city = city;
         this.localTime = localTime;
         this.forecastInfo = forecastInfo;
@@ -61,7 +61,7 @@ public class Locations {
         return temperature;
     }
 
-    public void setTemperature(double temperature) {
+    public void setTemperature(int temperature) {
         this.temperature = temperature;
     }
 }

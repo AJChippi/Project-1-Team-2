@@ -19,20 +19,15 @@ public class differentLocations extends AppCompatActivity {
         locationsArrayList = new ArrayList<>();
         locationList = findViewById(R.id.locationList);
 
-        LocationAdapter adapter = new LocationAdapter(locationsArrayList,this);
-        locationList.setAdapter(adapter);
-        locationList.setLayoutManager(new LinearLayoutManager(this));
-
         //Adding dummy data to arraylist
         locationsArrayList.add(new Locations("Saginaw", "15:15","Sunny",78.5,69.8,75));
         locationsArrayList.add(new Locations("Troy", "24:15","Cloudy",71.5,79.8,65));
         locationsArrayList.add(new Locations("Detroit", "15:15","Mostly Clear",78.5,69.8,85));
 
-
+        LocationAdapter adapter = new LocationAdapter(locationsArrayList,this);
+        locationList.setAdapter(adapter);
+        locationList.setLayoutManager(new LinearLayoutManager(this));
         adapter.notifyDataSetChanged();
-
-
-
 
         /**
          * Swipe to remove item from location list
