@@ -14,11 +14,15 @@
         android:theme="@style/Theme.Project1Team2"
         tools:targetApi="31">
         <activity
+            android:name=".layout_locations_activity"
+            android:exported="false" />
+        <activity
             android:name=".Satellite"
             android:exported="false" />
         <activity
+
             android:name=".differentLocations"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".settings"
             android:exported="false" />
