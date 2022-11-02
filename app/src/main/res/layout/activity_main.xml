@@ -31,9 +31,12 @@
 
         android:backgroundTint="?android:attr/panelBackground"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnFavorites"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/list_icon"
         tools:ignore="SpeakableTextPresentCheck" />
+
 
     <ImageButton
         android:id="@+id/btnSettinga"
@@ -54,6 +57,7 @@
         app:layout_constraintTop_toTopOf="@+id/btnSettinga"
         app:srcCompat="@android:drawable/btn_star"
         tools:ignore="SpeakableTextPresentCheck" />
+
 
     <TextView
         android:id="@+id/txtLocation"
@@ -205,5 +209,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/btnSatellite"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
+    <ImageButton
+        android:id="@+id/btnSettings"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/btnFavorites"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/txtDate"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/gearicon" />
+
+
+    <ImageButton
+        android:id="@+id/btnFavorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/settings"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnSettings"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/btn_star" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

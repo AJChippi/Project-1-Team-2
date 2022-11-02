@@ -12,7 +12,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageButton settings;
+    ImageButton btnSettings, btnFavorites, btnSatellite;
+
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
 
     // define this somewhere else
@@ -25,12 +26,132 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        settings = findViewById(R.id.btnListFavorite);
+
+        queue = Volley.newRequestQueue(this);
+        btnSettings = findViewById(R.id.btnSettings);
+        btnFavorites = findViewById(R.id.btnFavorites);
+        btnSatellite = findViewById(R.id.btnSatellite);
+
+
         txtDate = findViewById(R.id.txtDate);
         txtLocation = findViewById(R.id.txtLocation);
         txtDegree = findViewById(R.id.txtDegree);
         txtCondition = findViewById(R.id.txtCondition);
         txtHighToLow = findViewById(R.id.txtHighToLow);
+
+
+        btnSettings.setOnClickListener(view ->{
+            // go to settings page
+            Intent intent = new Intent(MainActivity.this, settings.class);
+            startActivity(intent);
+
+        });
+
+        btnFavorites.setOnClickListener(view ->{
+            // go to favorites page
+            Intent intent = new Intent(MainActivity.this, differentLocations.class);
+            startActivity(intent);
+
+        });
+
+        btnSatellite.setOnClickListener(view ->{
+            // go to satellite page
+            Intent intent = new Intent(MainActivity.this, Satellite.class);
+            startActivity(intent);
+
+        });
+
+
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
+                    locationURL,
+                    null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            JSONObject jName = null;
+                            try {
+                                jName = response.getJSONObject(0);
+                                String name = jName.getString("LocalizedName");
+                                String key = jName.getString("Key");
+                                String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
+                                txtLocation.setText(name);
+
+                                JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL, null, new Response.Listener<JSONArray>() {
+                                    @Override
+                                    public void onResponse(JSONArray response) {
+                                        JSONObject jName = null;
+                                        try {
+                                            jName = response.getJSONObject(0);
+                                            String imperial = jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
+                                            String weatherText = jName.getString("WeatherText");
+                                            txtDegree.setText(imperial);
+                                            txtCondition.setText(weatherText);
+                                            String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
+                                            JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                                                @Override
+                                                public void onResponse(JSONObject response) {
+                                                    try {
+                                                        String high = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
+                                                        String low = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
+                                                        txtHighToLow.setText(high + "°/" + low + "°");
+                                                        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP", null, new Response.Listener<JSONArray>() {
+                                                            @Override
+                                                            public void onResponse(JSONArray response) {
+                                                                JSONObject jName = null;
+                                                                try {
+                                                                    jName = response.getJSONObject(0);
+                                                                    String imperial = jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
+                                                                    //need to build the byHour.xml and input the data
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        }, new Response.ErrorListener() {
+                                                            @Override
+                                                            public void onErrorResponse(VolleyError error) {
+                                                                Log.d(myTag, "Error: " + error.getMessage());
+                                                            }
+                                                        });
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            }, new Response.ErrorListener() {
+                                                @Override
+                                                public void onErrorResponse(VolleyError error) {
+                                                    Log.d(myTag, "Error: " + error.getMessage());
+                                                }
+                                            });
+                                            queue.add(request2);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d(myTag, "onErrorResponse: " + error.getMessage());
+                                    }
+                                });
+                                queue.add(request1);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            txtLocation.setText("Error");
+                            Log.d(myTag, error.toString());
+                            error.printStackTrace();
+                        }
+                    }
+            );
+
+            queue.add(request);
+
+
 
         txtDate.setText(new SimpleDateFormat("E, MMM dd, yyyy").format(new Date()));
 
