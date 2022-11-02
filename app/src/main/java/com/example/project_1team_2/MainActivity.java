@@ -30,9 +30,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageButton btnSettings;
+    ImageButton btnSettings, btnFavorites, btnSatellite;
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
-    Button settings2;
 
     // define this somewhere else
     ListView lstByHour, lstByDay;
@@ -53,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
         queue = Volley.newRequestQueue(this);
         btnSettings = findViewById(R.id.btnSettings);
+        btnFavorites = findViewById(R.id.btnFavorites);
+        btnSatellite = findViewById(R.id.btnSatellite);
 
         txtDate = findViewById(R.id.txtDate);
         txtLocation = findViewById(R.id.txtLocation);
@@ -63,6 +64,20 @@ public class MainActivity extends AppCompatActivity {
         btnSettings.setOnClickListener(view ->{
             // go to settings page
             Intent intent = new Intent(MainActivity.this, settings.class);
+            startActivity(intent);
+
+        });
+
+        btnFavorites.setOnClickListener(view ->{
+            // go to favorites page
+            Intent intent = new Intent(MainActivity.this, differentLocations.class);
+            startActivity(intent);
+
+        });
+
+        btnSatellite.setOnClickListener(view ->{
+            // go to satellite page
+            Intent intent = new Intent(MainActivity.this, Satellite.class);
             startActivity(intent);
 
         });
