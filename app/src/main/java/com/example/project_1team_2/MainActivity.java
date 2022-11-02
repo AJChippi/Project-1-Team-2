@@ -2,6 +2,7 @@ package com.example.project_1team_2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,16 +30,20 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageButton settings;
+    ImageButton btnSettings;
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
-    Button btnTry;
+    Button settings2;
 
     // define this somewhere else
     ListView lstByHour, lstByDay;
     String myTag = "MY_APP";
 
+    String searchName = "";
+
     RequestQueue queue;
-    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP&q=saginaw";
+    // generate locationURl from search name if searchName is empty default to saginaw
+
+    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP&q="+(searchName.length()==0?"saginaw":searchName);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +51,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         queue = Volley.newRequestQueue(this);
-        settings = findViewById(R.id.settings);
+        btnSettings = findViewById(R.id.btnSettings);
         txtDate = findViewById(R.id.txtDate);
         txtLocation = findViewById(R.id.txtLocation);
         txtDegree = findViewById(R.id.txtDegree);
         txtCondition = findViewById(R.id.txtCondition);
         txtHighToLow = findViewById(R.id.txtHighToLow);
+
+        btnSettings.setOnClickListener(view ->{
+            // go to settings page
+            Intent intent = new Intent(MainActivity.this, settings.class);
+            startActivity(intent);
+
+        });
 
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
@@ -86,6 +98,24 @@ public class MainActivity extends AppCompatActivity {
                                                         String high = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
                                                         String low = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
                                                         txtHighToLow.setText(high + "°/" + low + "°");
+                                                        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP", null, new Response.Listener<JSONArray>() {
+                                                            @Override
+                                                            public void onResponse(JSONArray response) {
+                                                                JSONObject jName = null;
+                                                                try {
+                                                                    jName = response.getJSONObject(0);
+                                                                    String imperial = jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
+                                                                    //need to build the byHour.xml and input the data
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        }, new Response.ErrorListener() {
+                                                            @Override
+                                                            public void onErrorResponse(VolleyError error) {
+                                                                Log.d(myTag, "Error: " + error.getMessage());
+                                                            }
+                                                        });
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
