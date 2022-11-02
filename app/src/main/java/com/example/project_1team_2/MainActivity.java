@@ -3,15 +3,11 @@ package com.example.project_1team_2;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        settings = findViewById(R.id.settings);
+        settings = findViewById(R.id.btnListFavorite);
         txtDate = findViewById(R.id.txtDate);
         txtLocation = findViewById(R.id.txtLocation);
         txtDegree = findViewById(R.id.txtDegree);
@@ -37,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         txtHighToLow = findViewById(R.id.txtHighToLow);
 
         txtDate.setText(new SimpleDateFormat("E, MMM dd, yyyy").format(new Date()));
+
 
     }
 }
