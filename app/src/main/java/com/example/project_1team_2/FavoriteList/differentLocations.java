@@ -1,10 +1,12 @@
-package com.example.project_1team_2;
+package com.example.project_1team_2.FavoriteList;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+
+import com.example.project_1team_2.R;
 
 import java.util.ArrayList;
 
