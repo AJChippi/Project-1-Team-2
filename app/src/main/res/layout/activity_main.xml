@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/settings"
+        android:id="@+id/btnListFavorite"
 
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -34,7 +34,30 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnFavorites"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/list_icon" />
+        app:srcCompat="@drawable/list_icon"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+
+    <ImageButton
+        android:id="@+id/btnSettinga"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:backgroundTint="?android:attr/panelBackground"
+        app:layout_constraintEnd_toStartOf="@+id/btnListFavorite"
+        app:layout_constraintTop_toTopOf="@+id/btnListFavorite"
+        app:srcCompat="@drawable/gearicon"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/btnFavorite"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:backgroundTint="?android:attr/panelBackground"
+        app:layout_constraintEnd_toStartOf="@+id/btnSettinga"
+        app:layout_constraintTop_toTopOf="@+id/btnSettinga"
+        app:srcCompat="@android:drawable/btn_star"
+        tools:ignore="SpeakableTextPresentCheck" />
+
 
     <TextView
         android:id="@+id/txtLocation"
@@ -144,7 +167,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lstByDay"
-        app:srcCompat="@drawable/satellite" />
+        app:srcCompat="@drawable/satellite"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/textView3"
@@ -172,6 +196,20 @@
         app:layout_constraintStart_toStartOf="@+id/lstByDay"
         app:layout_constraintTop_toBottomOf="@+id/lstByHour" />
 
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#245063"
+        android:fontFamily="sans-serif-black"
+        android:foregroundTint="#FFFFFF"
+        android:text="View Satellite Image"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/btnSatellite"
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
     <ImageButton
         android:id="@+id/btnSettings"
         android:layout_width="50dp"
@@ -183,6 +221,7 @@
         app:layout_constraintStart_toEndOf="@+id/txtDate"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/gearicon" />
+
 
     <ImageButton
         android:id="@+id/btnFavorites"

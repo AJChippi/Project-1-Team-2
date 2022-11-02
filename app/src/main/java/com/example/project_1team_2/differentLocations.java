@@ -2,6 +2,7 @@ package com.example.project_1team_2;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.SearchView;
 
+<<<<<<< HEAD
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -24,7 +26,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+=======
+>>>>>>> main
 public class differentLocations extends AppCompatActivity {
+
     RecyclerView locationList;
     ArrayList<Locations> locationsArrayList;
     String searchName = "";
@@ -37,10 +42,12 @@ public class differentLocations extends AppCompatActivity {
     String tempLowest;
     RequestQueue queue;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_different_locations);
+
         locationsArrayList = new ArrayList<>();
         locationList = findViewById(R.id.locationList);
         queue = Volley.newRequestQueue(this);
