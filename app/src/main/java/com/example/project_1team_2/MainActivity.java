@@ -1,6 +1,6 @@
 package com.example.project_1team_2;
 import androidx.appcompat.app.AppCompatActivity;
-<<<<<<< HEAD
+
 import android.content.Intent; import android.os.Bundle; import android.util.Log;
 import android.view.View; import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,14 +22,12 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-=======
 
->>>>>>> main
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-<<<<<<< HEAD
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -41,9 +39,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-=======
-
->>>>>>> main
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
