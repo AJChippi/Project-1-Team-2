@@ -1,8 +1,11 @@
 package com.example.project_1team_2;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent; import android.os.Bundle; import android.util.Log;
-import android.view.View; import android.widget.Button;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
     // define this somewhere else
     ListView lstByHour, lstByDay;
+
+    RequestQueue queue;
+    String myTag = "MY_APP";
+
+    String searchName = "";
+    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP&q="+(searchName.length()==0?"saginaw":searchName);
 
 
 

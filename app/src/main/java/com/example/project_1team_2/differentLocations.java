@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.SearchView;
-
-<<<<<<< HEAD
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,8 +24,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-=======
->>>>>>> main
 public class differentLocations extends AppCompatActivity {
 
     RecyclerView locationList;
@@ -128,31 +124,6 @@ public class differentLocations extends AppCompatActivity {
 //        locationsArrayList.add(new Locations("Tampa", "15:15","Mostly Clear",78.5,69.8,95));
 //        locationsArrayList.add(new Locations("Miami", "15:15","Mostly Clear",78.5,69.8,95));
 //        locationsArrayList.add(new Locations("Dhaka", "15:15","Mostly Clear",78.5,69.8,95));
-
-
-        LocationAdapter adapter = new LocationAdapter(locationsArrayList,this);
-        locationList.setAdapter(adapter);
-        locationList.setLayoutManager(new LinearLayoutManager(this));
-        adapter.notifyDataSetChanged();
-
-        /**
-         * Swipe to remove item from location list
-         */
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                locationsArrayList.remove(viewHolder.getLayoutPosition());
-                adapter.notifyDataSetChanged();
-
-            }
-        });
-        helper.attachToRecyclerView(locationList);
-
 
 
     }

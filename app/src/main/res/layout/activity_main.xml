@@ -38,27 +38,6 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
 
-    <ImageButton
-        android:id="@+id/btnSettinga"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:backgroundTint="?android:attr/panelBackground"
-        app:layout_constraintEnd_toStartOf="@+id/btnListFavorite"
-        app:layout_constraintTop_toTopOf="@+id/btnListFavorite"
-        app:srcCompat="@drawable/gearicon"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <ImageButton
-        android:id="@+id/btnFavorite"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:backgroundTint="?android:attr/panelBackground"
-        app:layout_constraintEnd_toStartOf="@+id/btnSettinga"
-        app:layout_constraintTop_toTopOf="@+id/btnSettinga"
-        app:srcCompat="@android:drawable/btn_star"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-
     <TextView
         android:id="@+id/txtLocation"
         android:layout_width="wrap_content"
