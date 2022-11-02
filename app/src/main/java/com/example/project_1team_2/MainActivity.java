@@ -50,8 +50,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         queue = Volley.newRequestQueue(this);
         btnSettings = findViewById(R.id.btnSettings);
+
         txtDate = findViewById(R.id.txtDate);
         txtLocation = findViewById(R.id.txtLocation);
         txtDegree = findViewById(R.id.txtDegree);
