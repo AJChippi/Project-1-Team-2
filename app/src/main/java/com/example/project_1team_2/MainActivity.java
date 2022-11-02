@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageButton settings,settings2;
+    ImageButton settings;
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
 
     // define this somewhere else
@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         settings = findViewById(R.id.settings);
-        settings2 = findViewById(R.id.settings2);
 
         txtDate = findViewById(R.id.txtDate);
         txtLocation = findViewById(R.id.txtLocation);
@@ -35,11 +34,6 @@ public class MainActivity extends AppCompatActivity {
         txtCondition = findViewById(R.id.txtCondition);
         txtHighToLow = findViewById(R.id.txtHighToLow);
 
-
-        settings2.setOnClickListener(view -> {
-            Intent activity2Intent = new Intent(getApplicationContext(), differentLocations.class);
-            startActivity(activity2Intent);
-        });
 
 
     }
