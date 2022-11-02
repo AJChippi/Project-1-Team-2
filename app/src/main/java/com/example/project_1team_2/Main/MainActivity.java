@@ -90,24 +90,29 @@ public class MainActivity extends AppCompatActivity {
                                             jName = response.getJSONObject(0);
                                             String imperial = jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
                                             String weatherText = jName.getString("WeatherText");
-                                            txtDegree.setText(imperial);
+                                            txtDegree.setText(Double.valueOf(imperial).intValue() + "°");
                                             txtCondition.setText(weatherText);
                                             String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
+
                                             JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                                                 @Override
                                                 public void onResponse(JSONObject response) {
                                                     try {
                                                         String high = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
                                                         String low = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
-                                                        txtHighToLow.setText(high + "°/" + low + "°");
+                                                        txtHighToLow.setText("High: "+high + "° - Low: " + low + "°");
                                                         JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP", null, new Response.Listener<JSONArray>() {
                                                             @Override
                                                             public void onResponse(JSONArray response) {
                                                                 JSONObject jName = null;
                                                                 try {
+                                                                    int iconNumber = 0;
                                                                     jName = response.getJSONObject(0);
                                                                     String imperial = jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
+
+                                                                    String iconURL = "https://developer.accuweather.com/sites/default/files/"+iconNumber+"-s.png";
                                                                     //need to build the byHour.xml and input the data
+
                                                                 } catch (JSONException e) {
                                                                     e.printStackTrace();
                                                                 }
