@@ -2,47 +2,24 @@ package com.example.project_1team_2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
-
 
 public class MainActivity extends AppCompatActivity {
 
     ImageButton btnSettings, btnFavorites, btnSatellite;
+
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
 
     // define this somewhere else
     ListView lstByHour, lstByDay;
-    String myTag = "MY_APP";
 
-    String searchName = "";
 
-    RequestQueue queue;
-    // generate locationURl from search name if searchName is empty default to saginaw
-
-    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP&q="+(searchName.length()==0?"saginaw":searchName);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +32,13 @@ public class MainActivity extends AppCompatActivity {
         btnFavorites = findViewById(R.id.btnFavorites);
         btnSatellite = findViewById(R.id.btnSatellite);
 
+
         txtDate = findViewById(R.id.txtDate);
         txtLocation = findViewById(R.id.txtLocation);
         txtDegree = findViewById(R.id.txtDegree);
         txtCondition = findViewById(R.id.txtCondition);
         txtHighToLow = findViewById(R.id.txtHighToLow);
+
 
         btnSettings.setOnClickListener(view ->{
             // go to settings page

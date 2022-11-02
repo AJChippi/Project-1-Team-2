@@ -2,6 +2,7 @@ package com.example.project_1team_2;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,17 +10,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.widget.SearchView;
 
-import java.util.ArrayList;
-
 public class differentLocations extends AppCompatActivity {
+
     RecyclerView locationList;
     ArrayList<Locations> locationsArrayList;
     SearchView searchView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_different_locations);
+
         locationsArrayList = new ArrayList<>();
         locationList = findViewById(R.id.locationList);
         searchView = findViewById(R.id.searchView2);
