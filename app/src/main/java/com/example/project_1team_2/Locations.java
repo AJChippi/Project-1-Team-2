@@ -4,11 +4,11 @@ public class Locations {
     String city;
     String localTime;
     String forecastInfo;
-    double highestTemp;
-    double lowestTemp;
-    int temperature;
+    String highestTemp;
+    String lowestTemp;
+    String temperature;
 
-    public Locations(String city, String localTime, String forecastInfo, double highestTemp, double lowestTemp, int temperature) {
+    public Locations(String city, String localTime, String forecastInfo, String highestTemp, String lowestTemp, String temperature) {
         this.city = city;
         this.localTime = localTime;
         this.forecastInfo = forecastInfo;
@@ -41,27 +41,27 @@ public class Locations {
         this.forecastInfo = forecastInfo;
     }
 
-    public double getHighestTemp() {
+    public String getHighestTemp() {
         return highestTemp;
     }
 
-    public void setHighestTemp(double highestTemp) {
+    public void setHighestTemp(String highestTemp) {
         this.highestTemp = highestTemp;
     }
 
-    public double getLowestTemp() {
+    public String getLowestTemp() {
         return lowestTemp;
     }
 
-    public void setLowestTemp(double lowestTemp) {
+    public void setLowestTemp(String lowestTemp) {
         this.lowestTemp = lowestTemp;
     }
 
-    public double getTemperature() {
+    public String getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(int temperature) {
+    public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
 }
