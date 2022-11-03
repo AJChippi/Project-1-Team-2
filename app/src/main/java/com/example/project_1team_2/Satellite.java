@@ -76,5 +76,4 @@ public class Satellite extends AppCompatActivity {
         });
         requestQueue.add(request);
     }
-    }
 }
