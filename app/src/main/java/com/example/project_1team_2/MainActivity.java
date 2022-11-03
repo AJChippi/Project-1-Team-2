@@ -1,6 +1,9 @@
 package com.example.project_1team_2;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
 
-    final String API_KEY = "0gBx63kUUsZowQpDmsk1EGK0MphE8ELc";
+    final String API_KEY = "jstCxB26UKe3P2NzSZGan5ZqEUnQZU64";
     //by hour forecast list
     ArrayList<byHour> hourForecast;
     ArrayList<ByDay> byDayForecast;
@@ -75,20 +78,11 @@ public class MainActivity extends AppCompatActivity {
         // By day forecast
         setUpByDay();
 
-
-
-//        for (int i=0;i<20;i++){
-//            byDay.add(new ByDay("Yesterday","60","30",R.drawable.satellite,20));
-//        }
-
-//        adapter.notifyDataSetChanged();
-
         txtDate = findViewById(R.id.txtDate);
         txtLocation = findViewById(R.id.txtLocation);
         txtDegree = findViewById(R.id.txtDegree);
         txtCondition = findViewById(R.id.txtCondition);
         txtHighToLow = findViewById(R.id.txtHighToLow);
-
 
         btnSettings.setOnClickListener(view ->{
             // go to settings page
@@ -150,9 +144,6 @@ public class MainActivity extends AppCompatActivity {
                                                         String low = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
                                                         txtHighToLow.setText( "High: "+high + "° - Low: " + low + "°");
                                                         Log.d("testing", low);
-
-                                                        getByHourForecast(key);
-                                                        getByDayForecast(key);
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -164,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             });
                                             queue.add(request2);
+                                            getByHourForecast(key);
+                                            getByDayForecast(key);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -282,11 +275,11 @@ public class MainActivity extends AppCompatActivity {
     private void getByDayForecast(String key) {
         String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=" + API_KEY;
         //THIS
-        Log.d("testing", key);
-        Log.d("testing", "dsfgdf");
         JsonObjectRequest request4 = new JsonObjectRequest(Request.Method.GET, byDayURL, null, response -> {
             try {
                 JSONArray jArray = response.getJSONArray("DailyForecasts");
+                JSONObject headline = response.getJSONObject("Headline");
+                String headlineText = headline.getString("Text");
 
                 // Loop through and create for day list.
                 for (int i = 0; i < jArray.length(); i++) {
@@ -295,11 +288,47 @@ public class MainActivity extends AppCompatActivity {
                     String high = jName.getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
                     String low = jName.getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
                     String phrase = jName.getJSONObject("Day").getString("IconPhrase");
-                    Log.d("testing", phrase);
+                    Boolean hasPrecipitation = jName.getJSONObject("Day").getBoolean("HasPrecipitation");
 
-                    byDayForecast.add(new ByDay(date,high,low,phrase,20));
+                    String precipitationProbability = "";
+                    if(hasPrecipitation){
+                         precipitationProbability = jName.getJSONObject("Day").getString("PrecipitationIntensity");
+                    }
+
+                    int intensity = 0;
+                    switch(precipitationProbability){
+                        case "Light":
+                            precipitationProbability = "Light Rain";
+                             intensity = 33;
+                            break;
+                        case "Moderate":
+                            precipitationProbability = "Moderate Rain";
+                             intensity = 66;
+                            break;
+                        case "Heavy":
+                            precipitationProbability = "Heavy Rain";
+                             intensity = 100;
+                            break;
+                        default:
+                            precipitationProbability = "No Rain";
+                             intensity = 0;
+                            break;
+                    }
+
+                    byDayForecast.add(new ByDay(date,high,low,phrase,intensity,precipitationProbability));
                 }
                 byDayAdapter.notifyDataSetChanged();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("HEADLINE");
+                builder.setMessage(headlineText);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
 
             } catch (JSONException e) {
                 e.printStackTrace();
