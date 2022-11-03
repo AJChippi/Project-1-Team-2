@@ -204,10 +204,12 @@
         android:layout_width="52dp"
         android:layout_height="50dp"
         android:layout_marginVertical="8dp"
+
         android:backgroundTint="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/btnListFavorite"
         app:layout_constraintEnd_toStartOf="@+id/btnListFavorite"
         app:layout_constraintTop_toTopOf="@+id/btnListFavorite"
+
         app:srcCompat="@android:drawable/btn_star" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

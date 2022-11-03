@@ -1,14 +1,22 @@
 package com.example.project_1team_2;
-import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
 import com.example.project_1team_2.byHourDisplay.byHour;
 import com.example.project_1team_2.byHourDisplay.byHourAdapter;
 import com.squareup.picasso.Picasso;
@@ -47,10 +56,12 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -66,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     ListView lstByDay;
     RecyclerView lstByHour;
 
+
     RequestQueue queue;
     String myTag = "MY_APP";
 
@@ -73,19 +85,36 @@ public class MainActivity extends AppCompatActivity {
     String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL&q="+(searchName.length()==0?"saginaw":searchName);
 
 
+    ArrayList<ByDay> byDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        byDay = new ArrayList<>();
+
+
         queue = Volley.newRequestQueue(this);
         btnSettings = findViewById(R.id.btnSettings);
         btnListFavorites = findViewById(R.id.btnListFavorite);
         btnSatellite = findViewById(R.id.btnSatellite);
 
+
         //By Hour Forecast
         setUpByHour();
+
+        ByDayAdapter adapter = new ByDayAdapter(byDay);
+
+        lstByDay = findViewById(R.id.lstByDay);
+        lstByDay.setAdapter(adapter);
+
+//        for (int i=0;i<20;i++){
+//            byDay.add(new ByDay("Yesterday","60","30",R.drawable.satellite,20));
+//        }
+
+//        adapter.notifyDataSetChanged();
 
         txtDate = findViewById(R.id.txtDate);
         txtLocation = findViewById(R.id.txtLocation);
@@ -154,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 Log.d("DEBUG","heree");
                                                                 JSONObject jName = null;
                                                                 try {
+
                                                                     for (int i = 0; i < response.length(); i++) {
                                                                         jName = response.getJSONObject(i);
                                                                         String imperial = jName.getJSONObject("Temperature").getString("Value");
@@ -164,10 +194,46 @@ public class MainActivity extends AppCompatActivity {
                                                                     byHourAdapter.notifyDataSetChanged();
                                                                     Log.d("DEBUG",hourForecast.toString());
 
+
+                                                                    jName = response.getJSONObject(0);
+                                                                    String imperial = jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
+                                                                    //need to build the byHour.xml and input the data
+
+                                                                    String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
+//THIS
+                                                                    JsonObjectRequest request4 = new JsonObjectRequest(Request.Method.GET, byDayURL, null, new Response.Listener<JSONObject>() {
+                                                                        @Override
+                                                                        public void onResponse(JSONObject response) {
+                                                                            try {
+                                                                                JSONArray jArray = response.getJSONArray("DailyForecasts");
+
+                                                                                    JSONObject jName = jArray.getJSONObject(0);
+                                                                                    String date = jName.getString("Date");
+                                                                                    String high = jName.getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
+                                                                                    String low = jName.getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
+                                                                                    String phase = jName.getJSONObject("Day").getString("IconPhrase");
+
+                                                                                    byDay.add(new ByDay(date,high,low,phase,20));
+
+                                                                                adapter.notifyDataSetChanged();
+                                                                            } catch (JSONException e) {
+                                                                                e.printStackTrace();
+                                                                            }
+                                                                        }
+                                                                    }, new Response.ErrorListener() {
+                                                                        @Override
+                                                                        public void onErrorResponse(VolleyError error) {
+                                                                            Log.d(myTag, error.toString());
+                                                                        }
+                                                                    });
+                                                                    Log.d("test", "onResponse: " + request4);
+                                                                    queue.add(request4);
+//THIS
                                                                 } catch (JSONException e) {
                                                                     e.printStackTrace();
                                                                 }
                                                             }
+
                                                         }, new Response.ErrorListener() {
                                                             @Override
                                                             public void onErrorResponse(VolleyError error) {
@@ -216,6 +282,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
         txtDate.setText(new SimpleDateFormat("E, MMM dd, yyyy").format(new Date()));
 
 
@@ -233,5 +301,52 @@ public class MainActivity extends AppCompatActivity {
 
         byHourAdapter = new byHourAdapter(hourForecast,getApplicationContext());
         lstByHour.setAdapter(byHourAdapter);
+}
+
+    class ByDayAdapter extends BaseAdapter {
+
+        ArrayList<ByDay> byDay;
+
+        public ByDayAdapter(ArrayList<ByDay> byDay) {
+            this.byDay = byDay;
+        }
+
+        @Override
+        public int getCount() {
+            return byDay.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return byDay.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            if(view == null )
+                view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.by_day, viewGroup, false);
+
+            ByDay byDay = (ByDay) getItem(i);
+
+            TextView txtDay = view.findViewById(R.id.txtDay);
+            TextView txtProgress = view.findViewById(R.id.txtProgess);
+            ProgressBar progressBarPrecipitation = view.findViewById(R.id.progressBarPrecipitation);
+            TextView txtPhrase = view.findViewById(R.id.txtPhrase);
+            TextView txtHighLow = view.findViewById(R.id.txtHighLow);
+
+            txtDay.setText(byDay.day);
+            progressBarPrecipitation.setProgress(byDay.percentPrecipitation);
+            txtPhrase.setText(byDay.phase);
+            int progress = byDay.percentPrecipitation;
+            txtProgress.setText(progress + "%");
+            txtHighLow.setText(byDay.high + "°/" + byDay.low + "°");
+            return view;
+        }
+
     }
 }
