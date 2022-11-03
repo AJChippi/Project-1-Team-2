@@ -13,16 +13,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Satellite extends AppCompatActivity {
-    final String GEO_POSITION_URL = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search";
+    final String GEO_POSITION_URL = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL&q=43.7322%2C-83.4511";
     TextView txtPlaceSatellite;
     ImageView ivSatellite;
     double latitude, longitude;
     int GPSKey;
-    String API_KEY = "LjSUBb6fLYP2aN2OJG4TaPJXYxEmiQD2";
 
     RequestQueue requestQueue;
 
@@ -32,8 +32,8 @@ public class Satellite extends AppCompatActivity {
         setContentView(R.layout.activity_satellite);
         //Intent intent = getIntent();
         // TPM hardcoding values for now.
-        latitude = 43.7322;
-        longitude = -83.4511;
+        //latitude = 43.7322;
+        //longitude = -83.4511;
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -41,14 +41,16 @@ public class Satellite extends AppCompatActivity {
         ivSatellite = findViewById(R.id.ivSatellite);
 
         txtPlaceSatellite.setText("Saginaw");
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("api-key", API_KEY);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Log.d("Testing", "dsfsdf");
+
+        fetchData();
+
+    }
+
+    public void fetchData() {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, GEO_POSITION_URL, null, response -> {
             try {
+                Log.d("Testing", "something");
                 String result = response.getString("key");
                 Log.d("Testing", result);
             } catch (JSONException e) {
