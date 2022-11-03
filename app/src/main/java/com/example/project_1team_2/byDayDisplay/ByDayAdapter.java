@@ -1,4 +1,4 @@
-package com.example.project_1team_2;
+package com.example.project_1team_2.byDayDisplay;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.project_1team_2.R;
 
 import java.util.ArrayList;
 

@@ -4,19 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
-
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,43 +16,21 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.example.project_1team_2.byDayDisplay.ByDay;
+import com.example.project_1team_2.byDayDisplay.ByDayAdapter;
 import com.example.project_1team_2.byHourDisplay.byHour;
 import com.example.project_1team_2.byHourDisplay.byHourAdapter;
-import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-
-import android.os.Bundle;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<ByDay> byDay;
 
+    ByDayAdapter byDayAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,10 +75,10 @@ public class MainActivity extends AppCompatActivity {
         //By Hour Forecast
         setUpByHour();
 
-        ByDay.ByDayAdapter adapter = new ByDay.ByDayAdapter(byDay, this);
+        byDayAdapter = new ByDayAdapter(byDay, this);
 
         lstByDay = findViewById(R.id.lstByDay);
-        lstByDay.setAdapter(adapter);
+        lstByDay.setAdapter(byDayAdapter);
 
 //        for (int i=0;i<20;i++){
 //            byDay.add(new ByDay("Yesterday","60","30",R.drawable.satellite,20));
@@ -156,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                                 jName = response.getJSONObject(0);
                                 String name = jName.getString("LocalizedName");
                                 String key = jName.getString("Key");
+                                Log.d("testing", key);
                                 String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL";
                                 txtLocation.setText(name);
 
@@ -169,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                                             String weatherText = jName.getString("WeatherText");
                                             txtDegree.setText(imperial);
                                             txtCondition.setText(weatherText);
+                                            Log.d("testing", weatherText);
                                             String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL";
                                             JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                                                 @Override
@@ -177,70 +149,10 @@ public class MainActivity extends AppCompatActivity {
                                                         String high = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
                                                         String low = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
                                                         txtHighToLow.setText( "High: "+high + "° - Low: " + low + "°");
-                                                        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL", null, new Response.Listener<JSONArray>() {
-                                                            @Override
-                                                            public void onResponse(JSONArray response) {
-                                                                Log.d("DEBUG","heree");
-                                                                JSONObject jName = null;
-                                                                try {
+                                                        Log.d("testing", low);
 
-                                                                    for (int i = 0; i < response.length(); i++) {
-                                                                        jName = response.getJSONObject(i);
-                                                                        String imperial = jName.getJSONObject("Temperature").getString("Value");
-                                                                        long epochTime = jName.getLong("EpochDateTime");
-                                                                        int weatherIcon = jName.getInt("WeatherIcon");
-                                                                        hourForecast.add(new byHour(epochTime,weatherIcon,imperial));
-                                                                    }
-                                                                    byHourAdapter.notifyDataSetChanged();
-                                                                    Log.d("DEBUG",hourForecast.toString());
-
-
-                                                                    jName = response.getJSONObject(0);
-                                                                    String imperial = jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
-                                                                    //need to build the byHour.xml and input the data
-
-                                                                    String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
-//THIS
-                                                                    JsonObjectRequest request4 = new JsonObjectRequest(Request.Method.GET, byDayURL, null, new Response.Listener<JSONObject>() {
-                                                                        @Override
-                                                                        public void onResponse(JSONObject response) {
-                                                                            try {
-                                                                                JSONArray jArray = response.getJSONArray("DailyForecasts");
-
-                                                                                    JSONObject jName = jArray.getJSONObject(0);
-                                                                                    String date = jName.getString("Date");
-                                                                                    String high = jName.getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
-                                                                                    String low = jName.getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
-                                                                                    String phase = jName.getJSONObject("Day").getString("IconPhrase");
-
-                                                                                    byDay.add(new ByDay(date,high,low,phase,20));
-
-                                                                                adapter.notifyDataSetChanged();
-                                                                            } catch (JSONException e) {
-                                                                                e.printStackTrace();
-                                                                            }
-                                                                        }
-                                                                    }, new Response.ErrorListener() {
-                                                                        @Override
-                                                                        public void onErrorResponse(VolleyError error) {
-                                                                            Log.d(myTag, error.toString());
-                                                                        }
-                                                                    });
-                                                                    Log.d("test", "onResponse: " + request4);
-                                                                    queue.add(request4);
-//THIS
-                                                                } catch (JSONException e) {
-                                                                    e.printStackTrace();
-                                                                }
-                                                            }
-
-                                                        }, new Response.ErrorListener() {
-                                                            @Override
-                                                            public void onErrorResponse(VolleyError error) {
-                                                                Log.d(myTag, "Error: " + error.getMessage());
-                                                            }
-                                                        });
-                                                        queue.add(request3);
+                                                        getByHourForecast(key);
+                                                        getByDayForecast(key);
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -302,5 +214,66 @@ public class MainActivity extends AppCompatActivity {
         byHourAdapter = new byHourAdapter(hourForecast,getApplicationContext());
         lstByHour.setAdapter(byHourAdapter);
     }
+    private void getByHourForecast(String key) {
+        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL", null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d("DEBUG","heree");
+                JSONObject jName = null;
+                try {
 
+                    for (int i = 0; i < response.length(); i++) {
+                        jName = response.getJSONObject(i);
+                        String imperial = jName.getJSONObject("Temperature").getString("Value");
+                        long epochTime = jName.getLong("EpochDateTime");
+                        int weatherIcon = jName.getInt("WeatherIcon");
+                        Log.d("testing", epochTime + "");
+                        hourForecast.add(new byHour(epochTime,weatherIcon,imperial));
+                    }
+                    byHourAdapter.notifyDataSetChanged();
+                    Log.d("DEBUG",hourForecast.toString());
+
+
+                    jName = response.getJSONObject(0);
+                    String imperial = jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
+                    //need to build the byHour.xml and input the data
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(myTag, "Error: " + error.getMessage());
+            }
+        });
+        queue.add(request3);
+    }
+    private void getByDayForecast(String key) {
+        String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
+        //THIS
+        Log.d("testing", key);
+        Log.d("testing", "dsfgdf");
+        JsonObjectRequest request4 = new JsonObjectRequest(Request.Method.GET, byDayURL, null, response -> {
+            try {
+                JSONArray jArray = response.getJSONArray("DailyForecasts");
+
+                JSONObject jName = jArray.getJSONObject(0);
+                String date = jName.getString("Date");
+                String high = jName.getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
+                String low = jName.getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
+                String phase = jName.getJSONObject("Day").getString("IconPhrase");
+
+                byDay.add(new ByDay(date,high,low,phase,20));
+
+                byDayAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> Log.d(myTag, error.toString()));
+        Log.d("test", "onResponse: " + request4);
+        queue.add(request4);
+    }
 }

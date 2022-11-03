@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/rubby/AndroidStudioProjects/Project1Team2/app/src/main/res/layout/activity_main.xml" value="0.27395833333333336" />
-        <entry key="..\:/Users/rubby/AndroidStudioProjects/Project1Team2/app/src/main/res/layout/by_day.xml" value="0.5" />
+        <entry key="..\:/Classes/Fall2022/CS403-App/Group2Project/Project-1-Team-2/app/src/main/res/layout/activity_main.xml" value="0.67" />
+        <entry key="..\:/Classes/Fall2022/CS403-App/Group2Project/Project-1-Team-2/app/src/main/res/layout/activity_satellite.xml" value="0.27395833333333336" />
+        <entry key="..\:/Users/Tyler/Documents/Classes/Fall2022/CS403/Project-1-Team-2/app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="..\:/Users/Tyler/Documents/Classes/Fall2022/CS403/Project-1-Team-2/app/src/main/res/layout/by_day.xml" value="0.5" />
+        <entry key="..\:/Users/Tyler/Documents/Classes/Fall2022/CS403/Project-1-Team-2/app/src/main/res/layout/byhour_layout.xml" value="0.1015625" />
       </map>
     </option>
   </component>
