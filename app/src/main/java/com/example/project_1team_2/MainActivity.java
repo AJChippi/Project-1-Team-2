@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         //By Hour Forecast
         setUpByHour();
 
-        ByDayAdapter adapter = new ByDayAdapter(byDay);
+        ByDay.ByDayAdapter adapter = new ByDay.ByDayAdapter(byDay, this);
 
         lstByDay = findViewById(R.id.lstByDay);
         lstByDay.setAdapter(adapter);
@@ -301,52 +301,6 @@ public class MainActivity extends AppCompatActivity {
 
         byHourAdapter = new byHourAdapter(hourForecast,getApplicationContext());
         lstByHour.setAdapter(byHourAdapter);
-}
-
-    class ByDayAdapter extends BaseAdapter {
-
-        ArrayList<ByDay> byDay;
-
-        public ByDayAdapter(ArrayList<ByDay> byDay) {
-            this.byDay = byDay;
-        }
-
-        @Override
-        public int getCount() {
-            return byDay.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return byDay.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if(view == null )
-                view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.by_day, viewGroup, false);
-
-            ByDay byDay = (ByDay) getItem(i);
-
-            TextView txtDay = view.findViewById(R.id.txtDay);
-            TextView txtProgress = view.findViewById(R.id.txtProgess);
-            ProgressBar progressBarPrecipitation = view.findViewById(R.id.progressBarPrecipitation);
-            TextView txtPhrase = view.findViewById(R.id.txtPhrase);
-            TextView txtHighLow = view.findViewById(R.id.txtHighLow);
-
-            txtDay.setText(byDay.day);
-            progressBarPrecipitation.setProgress(byDay.percentPrecipitation);
-            txtPhrase.setText(byDay.phase);
-            int progress = byDay.percentPrecipitation;
-            txtProgress.setText(progress + "%");
-            txtHighLow.setText(byDay.high + "°/" + byDay.low + "°");
-            return view;
-        }
-
     }
+
 }
