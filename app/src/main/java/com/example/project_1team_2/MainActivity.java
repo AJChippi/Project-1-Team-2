@@ -1,6 +1,9 @@
 package com.example.project_1team_2;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
 
-    final String API_KEY = "5FnQmq7XLIV2nkGlUd7QXi6BdQgAfTg8";
+    final String API_KEY = "jstCxB26UKe3P2NzSZGan5ZqEUnQZU64";
     //by hour forecast list
     ArrayList<byHour> hourForecast;
     ArrayList<ByDay> byDayForecast;
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     String myTag = "MY_APP";
 
     String searchName = "";
-    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=5FnQmq7XLIV2nkGlUd7QXi6BdQgAfTg8&q="+(searchName.length()==0?"saginaw":searchName);
+    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+API_KEY+"&q="+(searchName.length()==0?"saginaw":searchName);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,20 +76,11 @@ public class MainActivity extends AppCompatActivity {
         // By day forecast
         setUpByDay();
 
-
-
-//        for (int i=0;i<20;i++){
-//            byDay.add(new ByDay("Yesterday","60","30",R.drawable.satellite,20));
-//        }
-
-//        adapter.notifyDataSetChanged();
-
         txtDate = findViewById(R.id.txtDate);
         txtLocation = findViewById(R.id.txtLocation);
         txtDegree = findViewById(R.id.txtDegree);
         txtCondition = findViewById(R.id.txtCondition);
         txtHighToLow = findViewById(R.id.txtHighToLow);
-
 
         btnSettings.setOnClickListener(view ->{
             // go to settings page
@@ -122,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                                 String name = jName.getString("LocalizedName");
                                 String key = jName.getString("Key");
                                 Log.d("testing", key);
-                                String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL";
+                                String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY;
                                 txtLocation.setText(name);
 
                                 JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL, null, new Response.Listener<JSONArray>() {
@@ -136,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                                             txtDegree.setText(imperial);
                                             txtCondition.setText(weatherText);
                                             Log.d("testing", weatherText);
-                                            String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL";
+                                            String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY;
                                             JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                                                 @Override
                                                 public void onResponse(JSONObject response) {
@@ -145,9 +139,6 @@ public class MainActivity extends AppCompatActivity {
                                                         String low = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
                                                         txtHighToLow.setText( "High: "+high + "° - Low: " + low + "°");
                                                         Log.d("testing", low);
-
-                                                        getByHourForecast(key);
-                                                        getByDayForecast(key);
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -159,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             });
                                             queue.add(request2);
+                                            getByHourForecast(key);
+                                            getByDayForecast(key);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -232,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
      * @param key The location key as a string.
      */
     private void getByHourForecast(String key) {
-        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL", null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey="+API_KEY, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d("DEBUG","heree");
@@ -274,29 +267,60 @@ public class MainActivity extends AppCompatActivity {
      * @param key The location key as a string.
      */
     private void getByDayForecast(String key) {
-        String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
+        String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey="+API_KEY;
         //THIS
-        Log.d("testing", key);
-        Log.d("testing", "dsfgdf");
         JsonObjectRequest request4 = new JsonObjectRequest(Request.Method.GET, byDayURL, null, response -> {
             try {
                 JSONArray jArray = response.getJSONArray("DailyForecasts");
-
-
+                JSONObject headline = response.getJSONObject("Headline");
+                String headlineText = headline.getString("Text");
                 for (int i = 0; i < jArray.length(); i++) {
                     JSONObject jName = jArray.getJSONObject(i);
                     String date = jName.getString("Date");
                     String high = jName.getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
                     String low = jName.getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
                     String phrase = jName.getJSONObject("Day").getString("IconPhrase");
-                    Log.d("testing", phrase);
+                    Boolean hasPrecipitation = jName.getJSONObject("Day").getBoolean("HasPrecipitation");
 
-                    byDayForecast.add(new ByDay(date,high,low,phrase,20));
+                    String precipitationProbability = "";
+                    if(hasPrecipitation){
+                         precipitationProbability = jName.getJSONObject("Day").getString("PrecipitationIntensity");
+                    }
+
+                    int intensity = 0;
+                    switch(precipitationProbability){
+                        case "Light":
+                            precipitationProbability = "Light Rain";
+                             intensity = 33;
+                            break;
+                        case "Moderate":
+                            precipitationProbability = "Moderate Rain";
+                             intensity = 66;
+                            break;
+                        case "Heavy":
+                            precipitationProbability = "Heavy Rain";
+                             intensity = 100;
+                            break;
+                        default:
+                            precipitationProbability = "No Rain";
+                             intensity = 0;
+                            break;
+                    }
+
+                    byDayForecast.add(new ByDay(date,high,low,phrase,intensity,precipitationProbability));
                 }
                 byDayAdapter.notifyDataSetChanged();
 
-
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("HEADLINE");
+                builder.setMessage(headlineText);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
 
             } catch (JSONException e) {
                 e.printStackTrace();

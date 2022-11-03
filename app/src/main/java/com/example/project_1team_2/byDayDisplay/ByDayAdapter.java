@@ -30,14 +30,16 @@ public class ByDayAdapter extends RecyclerView.Adapter {
         ProgressBar progressBarPrecipitation;
         TextView txtPhrase;
         TextView txtHighLow;
+        TextView txtPrecipitationIntensity;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             txtDay = itemView.findViewById(R.id.txtDay);
-            txtProgress = itemView.findViewById(R.id.txtProgess);
+            txtProgress = itemView.findViewById(R.id.txtProgress);
             progressBarPrecipitation = itemView.findViewById(R.id.progressBarPrecipitation);
             txtPhrase = itemView.findViewById(R.id.txtPhrase);
             txtHighLow = itemView.findViewById(R.id.txtHighLow);
+            txtPrecipitationIntensity = itemView.findViewById(R.id.txtprecipitationIntensity);
         }
     }
 
@@ -54,11 +56,12 @@ public class ByDayAdapter extends RecyclerView.Adapter {
         ByDay byDayItem = byDay.get(position);
         MyViewHolder itemViewHolder = (ByDayAdapter.MyViewHolder) holder;
         itemViewHolder.txtDay.setText(byDayItem.day);
-        itemViewHolder.txtHighLow.setText(byDayItem.high + "°/" + byDayItem.low + "°");
+        itemViewHolder.txtHighLow.setText(byDayItem.low + "°/" + byDayItem.high + "°");
         itemViewHolder.txtPhrase.setText(byDayItem.phrase);
+        itemViewHolder.progressBarPrecipitation.setProgress(byDayItem.percentPrecipitation);
+        itemViewHolder.txtProgress.setText(byDayItem.percentPrecipitation + "%");
+        itemViewHolder.txtPrecipitationIntensity.setText(byDayItem.PrecipitationIntensity);
 
-        //itemViewHolder.txtDay.setText(byDayItem.getDay());
-        //itemViewHolder.txtTemp.setText(byHourItem.getTemp()+ "°");
     }
 
     @Override
