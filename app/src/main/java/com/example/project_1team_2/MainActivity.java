@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,10 +38,12 @@ public class MainActivity extends AppCompatActivity {
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
 
     //by hour forecast list
-    ArrayList<byHour> hourForecast ;
-    com.example.project_1team_2.byHourDisplay.byHourAdapter byHourAdapter;
+    ArrayList<byHour> hourForecast;
+    ArrayList<ByDay> byDayForecast;
+    byHourAdapter byHourAdapter;
+    ByDayAdapter byDayAdapter;
     // define this somewhere else
-    ListView lstByDay;
+    RecyclerView lstByDay;
     RecyclerView lstByHour;
 
 
@@ -53,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
     String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL&q="+(searchName.length()==0?"saginaw":searchName);
 
 
-    ArrayList<ByDay> byDay;
 
-    ByDayAdapter byDayAdapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,22 +64,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        byDay = new ArrayList<>();
-
-
         queue = Volley.newRequestQueue(this);
         btnSettings = findViewById(R.id.btnSettings);
         btnListFavorites = findViewById(R.id.btnListFavorite);
         btnSatellite = findViewById(R.id.btnSatellite);
+        lstByDay = findViewById(R.id.lstByDay);
 
 
         //By Hour Forecast
         setUpByHour();
 
-        byDayAdapter = new ByDayAdapter(byDay, this);
+        // By day forecast
+        setUpByDay();
 
-        lstByDay = findViewById(R.id.lstByDay);
-        lstByDay.setAdapter(byDayAdapter);
+
 
 //        for (int i=0;i<20;i++){
 //            byDay.add(new ByDay("Yesterday","60","30",R.drawable.satellite,20));
@@ -214,6 +213,23 @@ public class MainActivity extends AppCompatActivity {
         byHourAdapter = new byHourAdapter(hourForecast,getApplicationContext());
         lstByHour.setAdapter(byHourAdapter);
     }
+
+    private void setUpByDay() {
+
+        byDayAdapter = new ByDayAdapter(byDayForecast, this);
+
+
+        byDayForecast = new ArrayList<>();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        lstByDay.setLayoutManager(linearLayoutManager);
+        lstByDay.setItemAnimator(new DefaultItemAnimator());
+
+        byDayAdapter = new ByDayAdapter(byDayForecast,getApplicationContext());
+        lstByDay.setAdapter(byDayAdapter);
+    }
+
     private void getByHourForecast(String key) {
         JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL", null, new Response.Listener<JSONArray>() {
             @Override
@@ -266,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
                 String low = jName.getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
                 String phase = jName.getJSONObject("Day").getString("IconPhrase");
 
-                byDay.add(new ByDay(date,high,low,phase,20));
+                byDayForecast.add(new ByDay(date,high,low,phase,20));
 
                 byDayAdapter.notifyDataSetChanged();
             } catch (JSONException e) {

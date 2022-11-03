@@ -5,14 +5,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.project_1team_2.R;
+import com.example.project_1team_2.byHourDisplay.byHour;
+import com.example.project_1team_2.byHourDisplay.byHourAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ByDayAdapter extends BaseAdapter {
+public class ByDayAdapter extends RecyclerView.Adapter {
 
     ArrayList<ByDay> byDay;
     Context context;
@@ -22,40 +29,46 @@ public class ByDayAdapter extends BaseAdapter {
         this.context = context;
     }
 
+    class MyViewHolder extends RecyclerView.ViewHolder{
+        TextView txtDay;
+        TextView txtProgress;
+        ProgressBar progressBarPrecipitation;
+        TextView txtPhrase;
+        TextView txtHighLow;
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txtDay = itemView.findViewById(R.id.txtDay);
+            txtProgress = itemView.findViewById(R.id.txtProgess);
+            progressBarPrecipitation = itemView.findViewById(R.id.progressBarPrecipitation);
+            txtPhrase = itemView.findViewById(R.id.txtPhrase);
+            txtHighLow = itemView.findViewById(R.id.txtHighLow);
+        }
+    }
+
+    @NonNull
     @Override
-    public int getCount() {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.by_day,parent,false);
+
+        return new MyViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        ByDay byDayItem = byDay.get(position);
+        MyViewHolder itemViewHolder = (ByDayAdapter.MyViewHolder) holder;
+        itemViewHolder.txtDay.setText("test");
+        //itemViewHolder.txtDay.setText(byDayItem.getDay());
+        //itemViewHolder.txtTemp.setText(byHourItem.getTemp()+ "°");
+
+        //String iconURL = "https://developer.accuweather.com/sites/default/files/"+byHourItem.getWeatherIcon()+"-s.png";
+        //Picasso.get().load(iconURL).into(itemViewHolder.ivWeather);
+    }
+
+    @Override
+    public int getItemCount() {
         return byDay.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return byDay.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null )
-            view = LayoutInflater.from(this.context).inflate(R.layout.by_day, viewGroup, false);
-
-        ByDay byDay = (ByDay) getItem(i);
-
-        TextView txtDay = view.findViewById(R.id.txtDay);
-        TextView txtProgress = view.findViewById(R.id.txtProgess);
-        ProgressBar progressBarPrecipitation = view.findViewById(R.id.progressBarPrecipitation);
-        TextView txtPhrase = view.findViewById(R.id.txtPhrase);
-        TextView txtHighLow = view.findViewById(R.id.txtHighLow);
-
-        txtDay.setText(byDay.day);
-        progressBarPrecipitation.setProgress(byDay.percentPrecipitation);
-        txtPhrase.setText(byDay.phase);
-        int progress = byDay.percentPrecipitation;
-        txtProgress.setText(progress + "%");
-        txtHighLow.setText(byDay.high + "°/" + byDay.low + "°");
-        return view;
-    }
 }
