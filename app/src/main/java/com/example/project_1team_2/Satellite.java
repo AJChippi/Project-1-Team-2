@@ -18,11 +18,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Satellite extends AppCompatActivity {
-    final String GEO_POSITION_URL = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL&q=43.7322%2C-83.4511";
+    final String GEO_POSITION_URL = "https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL&q=43.7322%2C-83.4511";
+    final String RADAR_IMAGE_URL = "https://dataservice.accuweather.com/imagery/v1/maps/radsat/480x480/338779";
     TextView txtPlaceSatellite;
     ImageView ivSatellite;
     double latitude, longitude;
-    int GPSKey;
+    String locationKey;
 
     RequestQueue requestQueue;
 
@@ -43,16 +44,16 @@ public class Satellite extends AppCompatActivity {
         txtPlaceSatellite.setText("Saginaw");
         Log.d("Testing", "dsfsdf");
 
-        fetchData();
+        setGeoPositionKey();
+        setSatelliteImage();
 
     }
 
-    public void fetchData() {
+    public void setGeoPositionKey() {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, GEO_POSITION_URL, null, response -> {
             try {
-                Log.d("Testing", "something");
-                String result = response.getString("key");
-                Log.d("Testing", result);
+                locationKey = response.getString("Key");
+                Log.d("Testing", locationKey);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -60,5 +61,20 @@ public class Satellite extends AppCompatActivity {
 
         });
         requestQueue.add(request);
+    }
+
+    public void setSatelliteImage() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, RADAR_IMAGE_URL, null, response -> {
+            try {
+                locationKey = response.getString("Key");
+                Log.d("Testing", locationKey);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+
+        });
+        requestQueue.add(request);
+    }
     }
 }
