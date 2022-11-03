@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
     RequestQueue queue;
     String myTag = "MY_APP";
-    String latitude;
-    String longitude;
+    double latitude;
+    double longitude;
 
     String searchName = "";
     String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+ API_KEY + "&q="+(searchName.length()==0?"saginaw":searchName);
@@ -124,7 +124,10 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 jName = response.getJSONObject(0);
                                 String name = jName.getString("LocalizedName");
-
+                                latitude = jName.getJSONObject("GeoPosition").getDouble("Latitude");
+                                longitude = jName.getJSONObject("GeoPosition").getDouble("Longitude");
+                                Log.d("testing", longitude + "");
+                                Log.d("testing", latitude + "");
                                 String key = jName.getString("Key");
                                 Log.d("testing", key);
                                 String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY;
