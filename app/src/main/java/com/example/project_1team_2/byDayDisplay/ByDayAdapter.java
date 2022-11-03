@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -13,9 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_1team_2.R;
-import com.example.project_1team_2.byHourDisplay.byHour;
-import com.example.project_1team_2.byHourDisplay.byHourAdapter;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -58,12 +53,12 @@ public class ByDayAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ByDay byDayItem = byDay.get(position);
         MyViewHolder itemViewHolder = (ByDayAdapter.MyViewHolder) holder;
-        itemViewHolder.txtDay.setText("test");
+        itemViewHolder.txtDay.setText(byDayItem.day);
+        itemViewHolder.txtHighLow.setText(byDayItem.high + "°/" + byDayItem.low + "°");
+        itemViewHolder.txtPhrase.setText(byDayItem.phrase);
+
         //itemViewHolder.txtDay.setText(byDayItem.getDay());
         //itemViewHolder.txtTemp.setText(byHourItem.getTemp()+ "°");
-
-        //String iconURL = "https://developer.accuweather.com/sites/default/files/"+byHourItem.getWeatherIcon()+"-s.png";
-        //Picasso.get().load(iconURL).into(itemViewHolder.ivWeather);
     }
 
     @Override

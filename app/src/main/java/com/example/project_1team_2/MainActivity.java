@@ -214,15 +214,16 @@ public class MainActivity extends AppCompatActivity {
         lstByHour.setAdapter(byHourAdapter);
     }
 
+    /**
+     * Set up the recycler view for the by day forecast. Initialize adapters and list.
+     */
     private void setUpByDay() {
 
         byDayAdapter = new ByDayAdapter(byDayForecast, this);
-
-
         byDayForecast = new ArrayList<>();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         lstByDay.setLayoutManager(linearLayoutManager);
         lstByDay.setItemAnimator(new DefaultItemAnimator());
 
@@ -230,6 +231,10 @@ public class MainActivity extends AppCompatActivity {
         lstByDay.setAdapter(byDayAdapter);
     }
 
+    /**
+     * Make api call to get the by hour forecast. Add hourly forecast to the by hour list.
+     * @param key The location key as a string.
+     */
     private void getByHourForecast(String key) {
         JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL", null, new Response.Listener<JSONArray>() {
             @Override
@@ -267,6 +272,11 @@ public class MainActivity extends AppCompatActivity {
         });
         queue.add(request3);
     }
+
+    /**
+     * Make an api call to get the by day forecast. Add days to list.
+     * @param key The location key as a string.
+     */
     private void getByDayForecast(String key) {
         String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
         //THIS
@@ -276,15 +286,22 @@ public class MainActivity extends AppCompatActivity {
             try {
                 JSONArray jArray = response.getJSONArray("DailyForecasts");
 
-                JSONObject jName = jArray.getJSONObject(0);
-                String date = jName.getString("Date");
-                String high = jName.getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
-                String low = jName.getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
-                String phase = jName.getJSONObject("Day").getString("IconPhrase");
 
-                byDayForecast.add(new ByDay(date,high,low,phase,20));
+                for (int i = 0; i < jArray.length(); i++) {
+                    JSONObject jName = jArray.getJSONObject(i);
+                    String date = jName.getString("Date");
+                    String high = jName.getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
+                    String low = jName.getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
+                    String phrase = jName.getJSONObject("Day").getString("IconPhrase");
+                    Log.d("testing", phrase);
 
+                    byDayForecast.add(new ByDay(date,high,low,phrase,20));
+                }
                 byDayAdapter.notifyDataSetChanged();
+
+
+
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
