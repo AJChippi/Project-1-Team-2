@@ -53,9 +53,11 @@ public class MainActivity extends AppCompatActivity {
 
     RequestQueue queue;
     String myTag = "MY_APP";
+    double latitude;
+    double longitude;
 
     String searchName = "";
-    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+API_KEY+"&q="+(searchName.length()==0?"saginaw":searchName);
+    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+ API_KEY + "&q="+(searchName.length()==0?"saginaw":searchName);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +98,11 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // Pass latitude and longitude and load map.
         btnSatellite.setOnClickListener(view ->{
-            // go to satellite page
-            Intent intent = new Intent(MainActivity.this, Satellite.class);
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
             startActivity(intent);
 
         });
@@ -114,8 +118,9 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 jName = response.getJSONObject(0);
                                 String name = jName.getString("LocalizedName");
+                                latitude = jName.getJSONObject("GeoPosition").getDouble("Latitude");
+                                longitude = jName.getJSONObject("GeoPosition").getDouble("Longitude");
                                 String key = jName.getString("Key");
-                                Log.d("testing", key);
                                 String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY;
                                 txtLocation.setText(name);
 
@@ -225,13 +230,14 @@ public class MainActivity extends AppCompatActivity {
      * @param key The location key as a string.
      */
     private void getByHourForecast(String key) {
-        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey="+API_KEY, null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=" + API_KEY, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d("DEBUG","heree");
                 JSONObject jName = null;
                 try {
 
+                    // Loop through and build by hour list.
                     for (int i = 0; i < response.length(); i++) {
                         jName = response.getJSONObject(i);
                         String imperial = jName.getJSONObject("Temperature").getString("Value");
@@ -267,13 +273,15 @@ public class MainActivity extends AppCompatActivity {
      * @param key The location key as a string.
      */
     private void getByDayForecast(String key) {
-        String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey="+API_KEY;
+        String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=" + API_KEY;
         //THIS
         JsonObjectRequest request4 = new JsonObjectRequest(Request.Method.GET, byDayURL, null, response -> {
             try {
                 JSONArray jArray = response.getJSONArray("DailyForecasts");
                 JSONObject headline = response.getJSONObject("Headline");
                 String headlineText = headline.getString("Text");
+
+                // Loop through and create for day list.
                 for (int i = 0; i < jArray.length(); i++) {
                     JSONObject jName = jArray.getJSONObject(i);
                     String date = jName.getString("Date");
