@@ -8,7 +8,7 @@ public class ByDay {
     int percentPrecipitation;
 
     public ByDay(String day, String high, String low, String phrase, int percentPrecipitation) {
-        this.day = day;
+        this.day = convertToDayOfWeek(day);
         this.high = high;
         this.low = low;
         this.phrase = phrase;
@@ -16,6 +16,11 @@ public class ByDay {
     }
 
     public ByDay() {
+    }
+
+    public String convertToDayOfWeek(String day) {
+        int indexOfT = day.indexOf("T");
+        return day.substring(0, indexOfT);
     }
 
     @Override

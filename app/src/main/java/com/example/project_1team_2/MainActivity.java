@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
 
+    final String API_KEY = "5FnQmq7XLIV2nkGlUd7QXi6BdQgAfTg8";
     //by hour forecast list
     ArrayList<byHour> hourForecast;
     ArrayList<ByDay> byDayForecast;
@@ -51,12 +52,7 @@ public class MainActivity extends AppCompatActivity {
     String myTag = "MY_APP";
 
     String searchName = "";
-    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL&q="+(searchName.length()==0?"saginaw":searchName);
-
-
-
-
-
+    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=5FnQmq7XLIV2nkGlUd7QXi6BdQgAfTg8&q="+(searchName.length()==0?"saginaw":searchName);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
