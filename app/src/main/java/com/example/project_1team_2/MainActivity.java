@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
 
-    final String API_KEY = "5FnQmq7XLIV2nkGlUd7QXi6BdQgAfTg8";
+    final String API_KEY = "0gBx63kUUsZowQpDmsk1EGK0MphE8ELc";
     //by hour forecast list
     ArrayList<byHour> hourForecast;
     ArrayList<ByDay> byDayForecast;
@@ -50,9 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
     RequestQueue queue;
     String myTag = "MY_APP";
+    String latitude;
+    String longitude;
 
     String searchName = "";
-    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=5FnQmq7XLIV2nkGlUd7QXi6BdQgAfTg8&q="+(searchName.length()==0?"saginaw":searchName);
+    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+ API_KEY + "&q="+(searchName.length()==0?"saginaw":searchName);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +106,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnSatellite.setOnClickListener(view ->{
             // go to satellite page
-            Intent intent = new Intent(MainActivity.this, Satellite.class);
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
             startActivity(intent);
 
         });
@@ -120,9 +124,10 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 jName = response.getJSONObject(0);
                                 String name = jName.getString("LocalizedName");
+
                                 String key = jName.getString("Key");
                                 Log.d("testing", key);
-                                String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL";
+                                String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY;
                                 txtLocation.setText(name);
 
                                 JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL, null, new Response.Listener<JSONArray>() {
@@ -136,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                                             txtDegree.setText(imperial);
                                             txtCondition.setText(weatherText);
                                             Log.d("testing", weatherText);
-                                            String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL";
+                                            String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY;
                                             JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                                                 @Override
                                                 public void onResponse(JSONObject response) {
@@ -232,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
      * @param key The location key as a string.
      */
     private void getByHourForecast(String key) {
-        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL", null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=" + API_KEY, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d("DEBUG","heree");
@@ -274,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
      * @param key The location key as a string.
      */
     private void getByDayForecast(String key) {
-        String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
+        String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=" + API_KEY;
         //THIS
         Log.d("testing", key);
         Log.d("testing", "dsfgdf");
