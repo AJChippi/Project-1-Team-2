@@ -31,8 +31,6 @@
 
         android:backgroundTint="?android:attr/panelBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnFavorites"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/list_icon"
         tools:ignore="SpeakableTextPresentCheck" />
@@ -207,8 +205,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/settings"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/btnListFavorite"
         app:layout_constraintStart_toEndOf="@+id/btnSettings"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_star" />
