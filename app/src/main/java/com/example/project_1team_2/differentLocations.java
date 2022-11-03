@@ -25,10 +25,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class differentLocations extends AppCompatActivity {
+
+
     RecyclerView locationList;
     ArrayList<Locations> locationsArrayList;
     String searchName = "";
-    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP&q="+(searchName.length()==0?"saginaw":searchName);
+    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL&q="+(searchName.length()==0?"saginaw":searchName);
     String city;
     String localTime;
     String forcastInfo;
