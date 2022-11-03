@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // Pass latitude and longitude and load map.
         btnSatellite.setOnClickListener(view ->{
-            // go to satellite page
             Intent intent = new Intent(MainActivity.this, MapsActivity.class);
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
@@ -126,10 +126,7 @@ public class MainActivity extends AppCompatActivity {
                                 String name = jName.getString("LocalizedName");
                                 latitude = jName.getJSONObject("GeoPosition").getDouble("Latitude");
                                 longitude = jName.getJSONObject("GeoPosition").getDouble("Longitude");
-                                Log.d("testing", longitude + "");
-                                Log.d("testing", latitude + "");
                                 String key = jName.getString("Key");
-                                Log.d("testing", key);
                                 String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY;
                                 txtLocation.setText(name);
 
@@ -247,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject jName = null;
                 try {
 
+                    // Loop through and build by hour list.
                     for (int i = 0; i < response.length(); i++) {
                         jName = response.getJSONObject(i);
                         String imperial = jName.getJSONObject("Temperature").getString("Value");
@@ -290,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 JSONArray jArray = response.getJSONArray("DailyForecasts");
 
-
+                // Loop through and create for day list.
                 for (int i = 0; i < jArray.length(); i++) {
                     JSONObject jName = jArray.getJSONObject(i);
                     String date = jName.getString("Date");
@@ -302,9 +300,6 @@ public class MainActivity extends AppCompatActivity {
                     byDayForecast.add(new ByDay(date,high,low,phrase,20));
                 }
                 byDayAdapter.notifyDataSetChanged();
-
-
-
 
             } catch (JSONException e) {
                 e.printStackTrace();
