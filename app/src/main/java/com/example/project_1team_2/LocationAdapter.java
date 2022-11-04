@@ -23,7 +23,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     @Override
     public LocationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.activity_layout_locations,parent,false);
-        view.setClipToOutline(false);
         return new LocationViewHolder(view);
     }
 
@@ -31,8 +30,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     public void onBindViewHolder(@NonNull LocationViewHolder holder, int position) {
         Locations l = locations.get(position);
         holder.txtCityName.setText(l.city);
-        holder.txtTemperature.setText(l.temperature+"°");
+        holder.txtTemperature.setText(l.temperature);
         holder.txtForcastInfo.setText(l.forecastInfo);
+        holder.txtHigh.setText("H:"+l.highestTemp+"°");
+        holder.txtLow.setText("L:"+l.lowestTemp+"°");
+        holder.txtLocalTime.setText(l.localTime);
+
     }
 
     @Override
@@ -45,7 +48,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         TextView txtTemperature;
         TextView txtLocalTime;
         TextView txtForcastInfo;
-        TextView txtTempHL;
+        TextView txtHigh;
+        TextView txtLow;
+
 
         public LocationViewHolder(@NonNull View view) {
             super(view);
@@ -53,7 +58,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             txtTemperature = view.findViewById(R.id.txtTemperature);
             txtLocalTime = view.findViewById(R.id.txtLocalTime);
             txtForcastInfo = view.findViewById(R.id.txtForcastInfo);
-            txtTempHL = view.findViewById(R.id.txtTempHL);
+            txtHigh = view.findViewById(R.id.txtHigh);
+            txtLow = view.findViewById(R.id.txtLow);
+            txtLocalTime = view.findViewById(R.id.txtLocalTime);
+
         }
     }
 

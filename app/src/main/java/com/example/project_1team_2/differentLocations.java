@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.SearchView;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -22,22 +22,32 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class differentLocations extends AppCompatActivity {
-
-
+    ImageButton btnAddCity;
+    EditText etSearchCity;
     RecyclerView locationList;
     ArrayList<Locations> locationsArrayList;
+    ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
+
     String searchName = "";
-    String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL&q="+(searchName.length()==0?"saginaw":searchName);
+    final String API_KEY = "wd6NvdetIIAjGGQP1GzsuRiKyKXEoBL7";
     String city;
     String localTime;
-    String forcastInfo;
+    String forecastInfo;
     String temperature;
     String tempHighest;
     String tempLowest;
     RequestQueue queue;
+    LocationAdapter adapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,94 +56,23 @@ public class differentLocations extends AppCompatActivity {
         locationsArrayList = new ArrayList<>();
         locationList = findViewById(R.id.locationList);
         queue = Volley.newRequestQueue(this);
+        btnAddCity = findViewById(R.id.btnAddCity);
+        etSearchCity = findViewById(R.id.etSearchCity);
 
+        populatePolularCities();
 
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, locationURL, null, response -> {
-            JSONObject jName = null;
-            try {
-                jName = response.getJSONObject(0);
-                String name = jName.getString("LocalizedName");
-                String key = jName.getString("Key");
-                String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
-                city = name;
+        btnAddCity.setOnClickListener(view -> {
+            populatCityList.add(String.valueOf(etSearchCity.getText()));
+            Log.d("fgfwef", String.valueOf(populatCityList));
 
-                JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL, null, response1 -> {
-                    JSONObject jName1 = null;
-                    try {
-                        jName1 = response1.getJSONObject(0);
-                        String imperial = jName1.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
-                        String weatherText = jName1.getString("WeatherText");
-                        temperature=imperial;
-                        forcastInfo=weatherText;
-                        String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP";
-                        JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, response11 -> {
-                            try {
-                                String high = response11.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
-                                String low = response11.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
-                                tempHighest = high;
-                                tempLowest = low;
-                                JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=jgnJnWRQkPKBFTkFqZzI8Njy2XdovHYP", null, response111 -> {
-                                    JSONObject jName11 = null;
-                                    try {
-                                        jName11 = response111.getJSONObject(0);
-                                        String imperial1 = jName11.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
-                                        //need to build the byHour.xml and input the data
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }, error -> {
-//                                                            Log.d(myTag, "Error: " + error.getMessage());
-                                });
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }, error -> {
-//                                                Log.d(myTag, "Error: " + error.getMessage());
-                        });
-                        queue.add(request2);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, error -> {
-//                                    Log.d(myTag, "onErrorResponse: " + error.getMessage());
-                });
-                queue.add(request1);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        },
-                error -> {
-                    city="Error";
-//                        Log.d(myTag, error.toString());
-                    error.printStackTrace();
-                }
-        );
-
-        queue.add(request);
-
-
-
-
-
-        //Adding dummy data to arraylist
-        locationsArrayList.add(new Locations(city, localTime,forcastInfo,tempHighest,tempLowest,temperature));
-//        locationsArrayList.add(new Locations("Troy", "24:15","Cloudy",71.5,79.8,65));
-//        locationsArrayList.add(new Locations("Detroit", "15:15","Mostly Clear",78.5,69.8,85));
-//        locationsArrayList.add(new Locations("New York", "15:15","Mostly Clear",78.5,69.8,60));
-//        locationsArrayList.add(new Locations("Tampa", "15:15","Mostly Clear",78.5,69.8,95));
-//        locationsArrayList.add(new Locations("Miami", "15:15","Mostly Clear",78.5,69.8,95));
-//        locationsArrayList.add(new Locations("Dhaka", "15:15","Mostly Clear",78.5,69.8,95));
-
-
-        LocationAdapter adapter = new LocationAdapter(locationsArrayList,this);
-        locationList.setAdapter(adapter);
-        locationList.setLayoutManager(new LinearLayoutManager(this));
-        adapter.notifyDataSetChanged();
+            fetchData(String.valueOf(etSearchCity.getText()));
+            etSearchCity.setText("");
+        });
 
         /**
          * Swipe to remove item from location list
          */
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -142,6 +81,7 @@ public class differentLocations extends AppCompatActivity {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 locationsArrayList.remove(viewHolder.getLayoutPosition());
+                populatCityList.remove(viewHolder.getLayoutPosition());
                 adapter.notifyDataSetChanged();
 
             }
@@ -149,6 +89,101 @@ public class differentLocations extends AppCompatActivity {
         helper.attachToRecyclerView(locationList);
 
 
+    }
 
+
+    public void fetchData(String cityName) {
+        String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=" + API_KEY + "&q=" + (searchName.length() == 0 ? cityName : searchName);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
+                locationURL,
+                null,
+                response -> {
+                    try {
+                        JSONObject jName = response.getJSONObject(0);
+                        city = jName.getString("LocalizedName");
+                        String localTime2 = jName.getJSONObject("TimeZone").getString("Name");
+
+                        String key = jName.getString("Key");
+                        String locationURL1 = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY;
+                        localTime = localTime2;
+                        convertToEST(localTime);
+
+
+                        JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL1, null, new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                try {
+                                    JSONObject jName = response.getJSONObject(0);
+                                    temperature = ((int) Double.parseDouble(jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value"))) + "°";
+                                    forecastInfo = jName.getString("WeatherText");
+
+
+                                    Log.d("testing", forecastInfo);
+                                    String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY;
+                                    JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                tempHighest = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
+                                                tempLowest = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
+                                                locationsArrayList.add(new Locations(city, localTime, forecastInfo, tempHighest, tempLowest, temperature));
+                                                adapter.notifyDataSetChanged();
+
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }, error -> Log.d("uyuy", "Error: " + error.getMessage()));
+                                    queue.add(request2);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, error -> Log.d("uyuy", "onErrorResponse: " + error.getMessage()));
+                        queue.add(request1);
+                    } catch (JSONException | ParseException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    Log.d("uyuy", error.toString());
+                    error.printStackTrace();
+                }
+        );
+
+        queue.add(request);
+
+
+        adapter = new LocationAdapter(locationsArrayList, this);
+        locationList.setAdapter(adapter);
+        locationList.setLayoutManager(new LinearLayoutManager(this));
+        adapter.notifyDataSetChanged();
+    }
+
+    public void convertToEST(String timeCode) throws ParseException {
+        DateTimeFormatter globalFormat = DateTimeFormatter.ofPattern("hh:mma z");
+        ZonedDateTime currentISTime = ZonedDateTime.now();
+        ZonedDateTime currentETime = currentISTime.withZoneSameInstant(ZoneId.of(timeCode)); //ET Time
+
+        System.out.println(globalFormat.format(currentETime));
+        localTime = globalFormat.format(currentETime);
+    }
+
+
+
+    private void populatePolularCities() {
+
+        new Thread(() -> {
+            try {
+                for(int i=0;i<populatCityList.size();i++){
+                    int finalI = i;
+                    runOnUiThread(() -> fetchData(populatCityList.get(finalI)));
+                    Thread.sleep(800);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

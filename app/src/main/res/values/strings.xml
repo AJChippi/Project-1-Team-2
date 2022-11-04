@@ -5,4 +5,5 @@
     <string name="settings_unit_key">unit_setting</string>
     <string name="settings_reference_by_hour_key">by_hour_ref_setting</string>
     <string name="settings_reference_by_day_key">by_day_ref_setting</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

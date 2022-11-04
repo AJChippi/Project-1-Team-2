@@ -7,13 +7,46 @@
     android:background="@drawable/background"
     tools:context=".differentLocations">
 
+    <ImageButton
+        android:id="@+id/btnAddCity"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="?android:attr/panelBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add_icon"
+        tools:ignore="SpeakableTextPresentCheck" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/locationList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAddCity" />
+
+    <EditText
+        android:id="@+id/etSearchCity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#FFFFFF"
+        android:ems="10"
+        android:hint="Add new city"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:shadowColor="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B2FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddCity"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
