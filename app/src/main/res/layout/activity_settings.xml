@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+=======
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+<<<<<<< HEAD
     tools:context=".Settings"
     android:orientation="vertical">
 
@@ -173,3 +178,8 @@
         android:text="Back"/>
 
 </LinearLayout>
+=======
+    tools:context=".settings">
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+=======
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/rubby/AndroidStudioProjects/Project1Team2/app/src/main/res/layout/activity_main.xml" value="0.27395833333333336" />
+        <entry key="..\:/Users/rubby/AndroidStudioProjects/Project1Team2/app/src/main/res/layout/by_day.xml" value="0.5" />
+        <entry key="..\:/Users/rubby/AndroidStudioProjects/Project1Team2/app/src/main/res/layout/byhour_layout.xml" value="0.3385416666666667" />
+      </map>
+    </option>
+  </component>
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

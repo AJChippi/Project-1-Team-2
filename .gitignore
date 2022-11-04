@@ -2,6 +2,10 @@
 .gradle
 /local.properties
 /.idea/caches
+<<<<<<< HEAD
+=======
+/.idea/misc.xml
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml

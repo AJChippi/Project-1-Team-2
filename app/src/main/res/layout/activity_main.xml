@@ -96,7 +96,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lstByHour"
         android:layout_width="0dp"
+<<<<<<< HEAD
         android:layout_height="0dp"
+=======
+        android:layout_height="wrap_content"
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:background="#2A647898"
@@ -106,6 +110,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtHighToLow" />
 
+<<<<<<< HEAD
     <ListView
         android:id="@+id/lstByDay"
         android:layout_width="0dp"
@@ -122,6 +127,8 @@
 
     </ListView>
 
+=======
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
@@ -136,6 +143,18 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.81" />
 
+<<<<<<< HEAD
+=======
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lstByDay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
     <ImageButton
         android:id="@+id/btnSatellite"
         android:layout_width="0dp"
@@ -165,13 +184,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+<<<<<<< HEAD
         android:layout_marginBottom="1dp"
+=======
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
         android:fontFamily="sans-serif-condensed-medium"
         android:foregroundTint="#FFFFFF"
         android:text="By Day"
         android:textColor="#FFFFFF"
+<<<<<<< HEAD
         app:layout_constraintBottom_toTopOf="@+id/lstByDay"
         app:layout_constraintStart_toStartOf="@+id/lstByDay" />
+=======
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lstByHour" />
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
 
     <TextView
         android:id="@+id/textView5"
@@ -185,7 +212,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/btnSatellite"
+<<<<<<< HEAD
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
+=======
+        app:layout_constraintTop_toBottomOf="@+id/lstByDay" />
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
 
     <ImageButton
         android:id="@+id/btnSettings"

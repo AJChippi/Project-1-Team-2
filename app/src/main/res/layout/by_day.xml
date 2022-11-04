@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+<<<<<<< HEAD
     android:layout_height="wrap_content">
+=======
+    android:layout_height="wrap_content"
+    android:background="#00FFFFFF"
+    android:backgroundTint="#27615252">
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
 
     <TextView
         android:id="@+id/txtDay"
@@ -15,32 +21,53 @@
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/progressBarPrecipitation"
+<<<<<<< HEAD
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+=======
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.253" />
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
 
     <TextView
         android:id="@+id/txtHighLow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="3dp"
+=======
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
         android:text="High/Low"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< HEAD
         app:layout_constraintTop_toTopOf="parent" />
+=======
+        app:layout_constraintHorizontal_bias="0.522"
+        app:layout_constraintStart_toEndOf="@+id/progressBarPrecipitation"
+        app:layout_constraintTop_toBottomOf="@+id/txtPhrase"
+        app:layout_constraintVertical_bias="0.295" />
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
 
     <ProgressBar
         android:id="@+id/progressBarPrecipitation"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="110dp"
         android:layout_height="16dp"
+<<<<<<< HEAD
         android:layout_marginStart="52dp"
+=======
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
         android:max="100"
         android:min="0"
         android:progressTint="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
+<<<<<<< HEAD
         app:layout_constraintStart_toEndOf="@+id/txtDay"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.475" />
@@ -49,10 +76,25 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+=======
+        app:layout_constraintEnd_toEndOf="@+id/txtProgress"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="@+id/txtProgress"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.296" />
+
+    <TextView
+        android:id="@+id/txtprecipitationIntensity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        android:paddingBottom="16dp"
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
         android:text="Precipitation"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< HEAD
         app:layout_constraintHorizontal_bias="0.424"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBarPrecipitation"
@@ -60,13 +102,24 @@
 
     <TextView
         android:id="@+id/txtProgess"
+=======
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressBarPrecipitation"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/txtProgress"
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="sdgsdg"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/progressBarPrecipitation"
         app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< HEAD
         app:layout_constraintHorizontal_bias="0.424"
+=======
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -76,8 +129,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
+<<<<<<< HEAD
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/txtHighLow"
+=======
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+>>>>>>> 73e45fac8d1887ed5158177cf0fb33970e15662a
         app:layout_constraintStart_toEndOf="@+id/progressBarPrecipitation"
         app:layout_constraintTop_toTopOf="parent" />
 
