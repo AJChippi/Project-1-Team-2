@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Project-1Team-2</string>
+    <string name="settings_preferences_file_key">4K-Wallpaper-Settings-Preferences</string>
+    <string name="settings_current_location_key">current_location_setting</string>
+    <string name="settings_unit_key">unit_setting</string>
+    <string name="settings_reference_by_hour_key">by_hour_ref_setting</string>
+    <string name="settings_reference_by_day_key">by_day_ref_setting</string>
+</resources>
