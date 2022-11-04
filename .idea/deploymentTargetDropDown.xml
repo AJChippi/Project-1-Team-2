@@ -6,7 +6,7 @@
         <type value="QUICK_BOOT_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
+            <type value="VIRTUSAL_DEVICE_PATH" />
             <value value="C:\Users\Tyler\.android\avd\Pixel_XL_API_33.avd" />
           </Key>
         </deviceKey>
