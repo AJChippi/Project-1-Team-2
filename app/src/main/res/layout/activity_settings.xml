@@ -154,7 +154,7 @@
                 android:id="@+id/byDayReferenceCheckbox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                android:checked="false"
                 android:text="By Day"
                 android:layout_marginHorizontal="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
