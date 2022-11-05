@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnSettings.setOnClickListener(view ->{
             // go to settings page
-            Intent intent = new Intent(MainActivity.this, settings.class);
+            Intent intent = new Intent(MainActivity.this, Settings.class);
             startActivity(intent);
 
         });

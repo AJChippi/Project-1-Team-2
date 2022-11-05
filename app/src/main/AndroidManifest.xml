@@ -43,7 +43,7 @@
             android:name=".differentLocations"
             android:exported="false" />
         <activity
-            android:name=".settings"
+            android:name=".Settings"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
