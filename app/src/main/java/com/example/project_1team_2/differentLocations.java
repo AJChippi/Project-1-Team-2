@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,17 +19,21 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class differentLocations extends AppCompatActivity {
     ImageButton btnAddCity;
@@ -37,7 +43,7 @@ public class differentLocations extends AppCompatActivity {
     ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
 
     String searchName = "";
-    final String API_KEY = "wd6NvdetIIAjGGQP1GzsuRiKyKXEoBL7";
+    final String API_KEY = "kSPG5FqSvf78etEHOrKfFRYnH5JGo62e";
     String city;
     String localTime;
     String forecastInfo;
@@ -46,7 +52,7 @@ public class differentLocations extends AppCompatActivity {
     String tempLowest;
     RequestQueue queue;
     LocationAdapter adapter;
-
+    SharedPreferences sharedPreferences;
 
 
     @Override
@@ -58,16 +64,40 @@ public class differentLocations extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
         btnAddCity = findViewById(R.id.btnAddCity);
         etSearchCity = findViewById(R.id.etSearchCity);
+        sharedPreferences = getSharedPreferences("USER",MODE_PRIVATE);
+
+
+        /**
+         * Retrieve list of popular cities from shared preferences
+         */
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("Set", "");
+        if (json.isEmpty()) {
+            Toast.makeText(this,"There is something error",Toast.LENGTH_LONG).show();
+        } else {
+            Type type = new TypeToken<List<String>>() {
+            }.getType();
+            populatCityList = gson.fromJson(json, type);
+            for (String data : populatCityList) {
+            }
+        }
+
+
+
+
+
+
 
         populatePolularCities();
 
         btnAddCity.setOnClickListener(view -> {
             populatCityList.add(String.valueOf(etSearchCity.getText()));
             Log.d("fgfwef", String.valueOf(populatCityList));
-
             fetchData(String.valueOf(etSearchCity.getText()));
+            Toast.makeText(this,etSearchCity.getText()+" added to favourite list",Toast.LENGTH_SHORT).show();
             etSearchCity.setText("");
         });
+
 
         /**
          * Swipe to remove item from location list
@@ -81,6 +111,8 @@ public class differentLocations extends AppCompatActivity {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 locationsArrayList.remove(viewHolder.getLayoutPosition());
+                Toast.makeText(differentLocations.this,populatCityList.get(viewHolder.getLayoutPosition())+" removed from favourite list",Toast.LENGTH_SHORT).show();
+
                 populatCityList.remove(viewHolder.getLayoutPosition());
                 adapter.notifyDataSetChanged();
 
@@ -91,7 +123,11 @@ public class differentLocations extends AppCompatActivity {
 
     }
 
-
+    /**
+     *
+     *
+     * @param cityName
+     */
     public void fetchData(String cityName) {
         String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=" + API_KEY + "&q=" + (searchName.length() == 0 ? cityName : searchName);
 
@@ -185,5 +221,17 @@ public class differentLocations extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Gson gson = new Gson();
+        String json = gson.toJson(populatCityList);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Log.d("TETETE",(json));
+        editor.putString("Set",json );
+        editor.commit();
     }
 }
