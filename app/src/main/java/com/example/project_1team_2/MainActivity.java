@@ -1,5 +1,6 @@
 package com.example.project_1team_2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +23,12 @@ import com.example.project_1team_2.byDayDisplay.ByDay;
 import com.example.project_1team_2.byDayDisplay.ByDayAdapter;
 import com.example.project_1team_2.byHourDisplay.byHour;
 import com.example.project_1team_2.byHourDisplay.byHourAdapter;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +41,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ImageButton btnSettings, btnListFavorites, btnSatellite;
 
@@ -50,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView lstByDay;
     RecyclerView lstByHour;
 
-
+    SupportMapFragment mapFragment;
     RequestQueue queue;
     String myTag = "MY_APP";
     double latitude;
@@ -68,8 +75,13 @@ public class MainActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
         btnSettings = findViewById(R.id.btnSettings);
         btnListFavorites = findViewById(R.id.btnListFavorite);
-        btnSatellite = findViewById(R.id.btnSatellite);
+        //btnSatellite = findViewById(R.id.btnSatellite);
         lstByDay = findViewById(R.id.lstByDay);
+
+        // Get handle on map.
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
 
         //By Hour Forecast
@@ -99,13 +111,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Pass latitude and longitude and load map.
-        btnSatellite.setOnClickListener(view ->{
-            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-            intent.putExtra("latitude", latitude);
-            intent.putExtra("longitude", longitude);
-            startActivity(intent);
-
-        });
+//        btnSatellite.setOnClickListener(view ->{
+//            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+//            intent.putExtra("latitude", latitude);
+//            intent.putExtra("longitude", longitude);
+//            startActivity(intent);
+//
+//        });
 
 
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
@@ -120,6 +132,10 @@ public class MainActivity extends AppCompatActivity {
                                 String name = jName.getString("LocalizedName");
                                 latitude = jName.getJSONObject("GeoPosition").getDouble("Latitude");
                                 longitude = jName.getJSONObject("GeoPosition").getDouble("Longitude");
+
+                                // Set map location.
+
+
                                 String key = jName.getString("Key");
                                 String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY;
                                 txtLocation.setText(name);
@@ -336,5 +352,12 @@ public class MainActivity extends AppCompatActivity {
         }, error -> Log.d(myTag, error.toString()));
         Log.d("test", "onResponse: " + request4);
         queue.add(request4);
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude, longitude))
+                .title("Marker"));
     }
 }
