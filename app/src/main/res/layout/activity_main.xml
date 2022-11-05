@@ -118,7 +118,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_end="139dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lstByDay"

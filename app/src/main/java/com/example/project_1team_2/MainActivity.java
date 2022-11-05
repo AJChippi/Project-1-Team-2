@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -23,6 +24,7 @@ import com.example.project_1team_2.byDayDisplay.ByDay;
 import com.example.project_1team_2.byDayDisplay.ByDayAdapter;
 import com.example.project_1team_2.byHourDisplay.byHour;
 import com.example.project_1team_2.byHourDisplay.byHourAdapter;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
 
-    final String API_KEY = "jstCxB26UKe3P2NzSZGan5ZqEUnQZU64";
+    final String API_KEY = "0gBx63kUUsZowQpDmsk1EGK0MphE8ELc";
     //by hour forecast list
     ArrayList<byHour> hourForecast;
     ArrayList<ByDay> byDayForecast;
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // define this somewhere else
     RecyclerView lstByDay;
     RecyclerView lstByHour;
+
+    GoogleMap googleMap;
 
     SupportMapFragment mapFragment;
     RequestQueue queue;
@@ -71,18 +75,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         queue = Volley.newRequestQueue(this);
         btnSettings = findViewById(R.id.btnSettings);
         btnListFavorites = findViewById(R.id.btnListFavorite);
-        //btnSatellite = findViewById(R.id.btnSatellite);
         lstByDay = findViewById(R.id.lstByDay);
-
-        // Get handle on map.
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
+        txtDate = findViewById(R.id.txtDate);
+        txtLocation = findViewById(R.id.txtLocation);
+        txtDegree = findViewById(R.id.txtDegree);
+        txtCondition = findViewById(R.id.txtCondition);
+        txtHighToLow = findViewById(R.id.txtHighToLow);
 
         //By Hour Forecast
         setUpByHour();
@@ -90,11 +91,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // By day forecast
         setUpByDay();
 
-        txtDate = findViewById(R.id.txtDate);
-        txtLocation = findViewById(R.id.txtLocation);
-        txtDegree = findViewById(R.id.txtDegree);
-        txtCondition = findViewById(R.id.txtCondition);
-        txtHighToLow = findViewById(R.id.txtHighToLow);
 
         btnSettings.setOnClickListener(view ->{
             // go to settings page
@@ -110,16 +106,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         });
 
-        // Pass latitude and longitude and load map.
-//        btnSatellite.setOnClickListener(view ->{
-//            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-//            intent.putExtra("latitude", latitude);
-//            intent.putExtra("longitude", longitude);
-//            startActivity(intent);
-//
-//        });
-
-
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
                     locationURL,
                     null,
@@ -134,7 +120,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 longitude = jName.getJSONObject("GeoPosition").getDouble("Longitude");
 
                                 // Set map location.
-
+                                mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                                        .findFragmentById(R.id.map);
+                                mapFragment.getMapAsync(MainActivity.this);
 
                                 String key = jName.getString("Key");
                                 String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY;
@@ -150,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             String weatherText = jName.getString("WeatherText");
                                             txtDegree.setText(imperial);
                                             txtCondition.setText(weatherText);
-                                            Log.d("testing", weatherText);
                                             String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY;
                                             JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                                                 @Override
@@ -159,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                         String high = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
                                                         String low = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
                                                         txtHighToLow.setText( "High: "+high + "° - Low: " + low + "°");
-                                                        Log.d("testing", low);
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -198,18 +184,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
                     }
             );
-
             queue.add(request);
 
-
-
-
-
         txtDate.setText(new SimpleDateFormat("E, MMM dd, yyyy").format(new Date()));
-
-
     }
 
+    /**
+     * Set up by hour view for by hour forecast. Initialize adapters and list.
+     */
     private void setUpByHour() {
 
         hourForecast = new ArrayList<>();
@@ -249,7 +231,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=" + API_KEY, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.d("DEBUG","heree");
                 JSONObject jName = null;
                 try {
 
@@ -259,12 +240,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         String imperial = jName.getJSONObject("Temperature").getString("Value");
                         long epochTime = jName.getLong("EpochDateTime");
                         int weatherIcon = jName.getInt("WeatherIcon");
-                        Log.d("testing", epochTime + "");
                         hourForecast.add(new byHour(epochTime,weatherIcon,imperial));
                     }
                     byHourAdapter.notifyDataSetChanged();
-                    Log.d("DEBUG",hourForecast.toString());
-
 
                     jName = response.getJSONObject(0);
                     String imperial = jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
@@ -282,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
         queue.add(request3);
+
     }
 
     /**
@@ -350,14 +329,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 e.printStackTrace();
             }
         }, error -> Log.d(myTag, error.toString()));
-        Log.d("test", "onResponse: " + request4);
         queue.add(request4);
     }
 
+    /**
+     * Use latitude and longitude from api call to set map location.
+     * @param googleMap Map object.
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+        LatLng location = new LatLng(latitude, longitude);
         googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude, longitude))
+                .position(location)
                 .title("Marker"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(10));
+        googleMap.getUiSettings().setAllGesturesEnabled(false);
+
+        // Pass latitude and longitude and route to map activity on click.
+        googleMap.setOnMapClickListener(latLng -> {
+          Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
+            startActivity(intent);
+        });
     }
 }
