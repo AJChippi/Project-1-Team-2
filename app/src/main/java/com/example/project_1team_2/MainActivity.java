@@ -4,18 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response; 
-import com.android.volley.VolleyError; 
+import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -26,7 +27,6 @@ import com.example.project_1team_2.byHourDisplay.byHour;
 import com.example.project_1team_2.byHourDisplay.byHourAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -45,11 +45,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ImageButton btnSettings, btnListFavorites, btnSatellite;
+    ImageButton btnSettings, btnListFavorites;
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
 
-    final String API_KEY = "0gBx63kUUsZowQpDmsk1EGK0MphE8ELc";
+    final String API_KEY = "VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL";
     //by hour forecast list
     ArrayList<byHour> hourForecast;
     ArrayList<ByDay> byDayForecast;
@@ -67,9 +67,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     double latitude;
     double longitude;
 
+    //Shared Preference
+    SharedPreferences settingsPref;
+
     String searchName = "";
     String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+ API_KEY + "&q="+(searchName.length()==0?"saginaw":searchName);
 
+    String isMetric = "&metric=";
+    boolean boolMetric =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +89,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         txtDegree = findViewById(R.id.txtDegree);
         txtCondition = findViewById(R.id.txtCondition);
         txtHighToLow = findViewById(R.id.txtHighToLow);
+
+        settingsPref = this.getSharedPreferences(
+                this.getResources().getString(R.string.settings_preferences_file_key), Context.MODE_PRIVATE);
+
+        String getUnitPreference = settingsPref.getString(getResources().getString(R.string.settings_unit_key),"F");
+        switch (getUnitPreference){
+            case("F"):
+                isMetric += "false";
+                boolMetric = false;
+                break;
+            case "C":
+                boolMetric = true;
+                isMetric += "true";
+        }
+
+        Log.d("MAINPAGE", isMetric);
+        boolean getHourPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
+       if (!getHourPreference)
+           lstByHour.setVisibility(View.GONE);
+
+        boolean getDayPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
+        if (!getDayPreference)
+            lstByDay.setVisibility(View.GONE);
 
         //By Hour Forecast
         setUpByHour();
@@ -109,84 +137,87 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
                     locationURL,
                     null,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            JSONObject jName = null;
-                            try {
-                                jName = response.getJSONObject(0);
-                                String name = jName.getString("LocalizedName");
-                                latitude = jName.getJSONObject("GeoPosition").getDouble("Latitude");
-                                longitude = jName.getJSONObject("GeoPosition").getDouble("Longitude");
+                    response -> {
+                        JSONObject jName = null;
+                        try {
+                            jName = response.getJSONObject(0);
+                            String name = jName.getString("LocalizedName");
+                            latitude = jName.getJSONObject("GeoPosition").getDouble("Latitude");
+                            longitude = jName.getJSONObject("GeoPosition").getDouble("Longitude");
 
-                                // Set map location.
-                                mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                                        .findFragmentById(R.id.map);
-                                mapFragment.getMapAsync(MainActivity.this);
+                            // Set map location.
+                            mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                                    .findFragmentById(R.id.map);
+                            mapFragment.getMapAsync(MainActivity.this);
 
-                                String key = jName.getString("Key");
-                                String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY;
-                                txtLocation.setText(name);
+                            String key = jName.getString("Key");
 
-                                JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL, null, new Response.Listener<JSONArray>() {
-                                    @Override
-                                    public void onResponse(JSONArray response) {
-                                        JSONObject jName = null;
-                                        try {
-                                            jName = response.getJSONObject(0);
-                                            String imperial = ((int) Double.parseDouble(jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value"))) +"°";
-                                            String weatherText = jName.getString("WeatherText");
-                                            txtDegree.setText(imperial);
-                                            txtCondition.setText(weatherText);
-                                            String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY;
-                                            JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-                                                @Override
-                                                public void onResponse(JSONObject response) {
-                                                    try {
-                                                        String high = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
-                                                        String low = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
-                                                        txtHighToLow.setText( "High: "+high + "° - Low: " + low + "°");
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            }, new Response.ErrorListener() {
-                                                @Override
-                                                public void onErrorResponse(VolleyError error) {
-                                                    Log.d(myTag, "Error: " + error.getMessage());
-                                                }
-                                            });
-                                            queue.add(request2);
-                                            getByHourForecast(key);
-                                            getByDayForecast(key);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.d(myTag, "onErrorResponse: " + error.getMessage());
-                                    }
-                                });
-                                queue.add(request1);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            getWeatherInformation(name, key);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            txtLocation.setText("Error");
-                            Log.d(myTag, error.toString());
-                            error.printStackTrace();
-                        }
+                    error -> {
+                        txtLocation.setText("Error");
+                        Log.d(myTag, error.toString());
+                        error.printStackTrace();
                     }
             );
             queue.add(request);
 
         txtDate.setText(new SimpleDateFormat("E, MMM dd, yyyy").format(new Date()));
+    }
+    /**
+     * get all the necessary weather for the given location
+     */
+    private void getWeatherInformation(String name, String key) {
+        String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY + isMetric;
+        txtLocation.setText(name);
+
+        JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL, null,
+                response1 -> {
+            JSONObject jName1 = null;
+            try {
+                jName1 = response1.getJSONObject(0);
+                String temp;
+                if (!boolMetric){
+                    temp = ((int) Double.parseDouble(jName1.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value"))) +"°";
+                } else {
+                    temp = ((int) Double.parseDouble(jName1.getJSONObject("Temperature").getJSONObject("Metric").getString("Value"))) +"°";
+                }
+
+                String weatherText = jName1.getString("WeatherText");
+                txtDegree.setText(temp);
+                txtCondition.setText(weatherText);
+                getHighAndLow(key);
+                getByHourForecast(key);
+                getByDayForecast(key);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> Log.d(myTag, "onErrorResponse: " + error.getMessage()));
+        queue.add(request1);
+    }
+
+    /**
+     * Set up High and Low and show it on the main page
+     */
+    private void getHighAndLow(String key) {
+        String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY+ isMetric;
+        JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response1) {
+                try {
+                    String high = response1.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
+                    String low = response1.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
+                    txtHighToLow.setText( "High: "+high + "° - Low: " + low + "°");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, error -> Log.d(myTag, "Error: " + error.getMessage()));
+
+        queue.add(request2);
     }
 
     /**
@@ -210,7 +241,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * Set up the recycler view for the by day forecast. Initialize adapters and list.
      */
     private void setUpByDay() {
-
         byDayAdapter = new ByDayAdapter(byDayForecast, this);
         byDayForecast = new ArrayList<>();
 
@@ -228,12 +258,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * @param key The location key as a string.
      */
     private void getByHourForecast(String key) {
-        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=" + API_KEY, null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest request3 = new JsonArrayRequest(Request.Method.GET, "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + key + "?apikey=" + API_KEY + isMetric, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 JSONObject jName = null;
                 try {
-
                     // Loop through and build by hour list.
                     for (int i = 0; i < response.length(); i++) {
                         jName = response.getJSONObject(i);
@@ -244,21 +273,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                     byHourAdapter.notifyDataSetChanged();
 
-                    jName = response.getJSONObject(0);
-                    String imperial = jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value");
-                    //need to build the byHour.xml and input the data
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(myTag, "Error: " + error.getMessage());
-            }
-        });
+        }, error -> Log.d(myTag, "Error: " + error.getMessage()));
         queue.add(request3);
 
     }
@@ -268,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * @param key The location key as a string.
      */
     private void getByDayForecast(String key) {
-        String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=" + API_KEY;
+        String byDayURL = "https://dataservice.accuweather.com/forecasts/v1/daily/5day/"+key+"?apikey=" + API_KEY + isMetric;
         //THIS
         JsonObjectRequest request4 = new JsonObjectRequest(Request.Method.GET, byDayURL, null, response -> {
             try {

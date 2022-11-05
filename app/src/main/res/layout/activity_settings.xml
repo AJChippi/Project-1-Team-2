@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Settings"
-    android:orientation="vertical">
+    android:background="@drawable/background"
+    android:backgroundTint="#050505"
+    android:orientation="vertical"
+    tools:context=".Settings">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@drawable/background">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -23,6 +26,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Unit"
+                android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -62,104 +66,57 @@
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="C" />
+                    android:text="C"
+                    android:textColor="#FFFFFF" />
 
                 <Button
                     android:id="@+id/fahrenheitButton"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="F" />
+                    android:shadowColor="#204781"
+                    android:text="F"
+                    android:textColor="#FFFFFF" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            <View
-                android:id="@+id/unitEndDivider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@id/unitToggleButton" />
-
-            <TextView
-                android:id="@+id/currLocHeading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-                android:text="Use Current Location?"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/useCurrentLocationSwitch"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/unitEndDivider"
-                app:layout_constraintBottom_toTopOf="@id/barrierBelowLocationSetting"/>
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/useCurrentLocationSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:checked="true"
-                app:layout_constraintBottom_toTopOf="@id/barrierBelowLocationSetting"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/currLocHeading"
-                app:layout_constraintTop_toBottomOf="@id/unitEndDivider" />
-
-
-
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrierBelowLocationSetting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="currLocHeading,useCurrentLocationSwitch"
-                tools:layout_editor_absoluteY="113dp" />
-
-            <View
-                android:id="@+id/currLocEndDivider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@id/barrierBelowLocationSetting" />
 
             <TextView
                 android:id="@+id/referenceHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
                 android:text="Reference"
+                android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/currLocEndDivider" />
+                app:layout_constraintTop_toBottomOf="@+id/unitToggleButton" />
 
             <CheckBox
                 android:id="@+id/byHourReferenceCheckbox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:checked="true"
                 android:text="By Hour"
+                android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/referenceHeading"
-                android:layout_marginHorizontal="16dp"/>
+                app:layout_constraintTop_toBottomOf="@id/referenceHeading" />
 
             <CheckBox
                 android:id="@+id/byDayReferenceCheckbox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:checked="false"
                 android:text="By Day"
-                android:layout_marginHorizontal="16dp"
+                android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/byHourReferenceCheckbox"/>
+                app:layout_constraintTop_toBottomOf="@id/byHourReferenceCheckbox" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -170,6 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Back"/>
+        android:backgroundTint="#05275C"
+        android:text="Back" />
 
 </LinearLayout>

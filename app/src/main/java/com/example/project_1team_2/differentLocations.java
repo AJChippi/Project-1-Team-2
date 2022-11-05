@@ -83,11 +83,6 @@ public class differentLocations extends AppCompatActivity {
         }
 
 
-
-
-
-
-
         populatePolularCities();
 
         btnAddCity.setOnClickListener(view -> {
