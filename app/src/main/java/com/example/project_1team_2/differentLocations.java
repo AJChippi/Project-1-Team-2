@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,7 +44,7 @@ public class differentLocations extends AppCompatActivity {
     ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
 
     String searchName = "";
-    final String API_KEY = "cX4hYjZnGaKjK7PUc0Vdoz096m1wJAoQ";
+    final String API_KEY = "3knmwx4pZle8RVL2K78nks9zZ3Jxmlkn";
     String myTag = "MY_APP";
     String city;
     String localTime;
@@ -54,7 +55,10 @@ public class differentLocations extends AppCompatActivity {
     RequestQueue queue;
     LocationAdapter adapter;
     SharedPreferences sharedPreferences;
-
+    String isMetric = "&metric=";
+    boolean boolMetric =false;
+    SharedPreferences settingsPref;
+    String metric="Metric";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,27 @@ public class differentLocations extends AppCompatActivity {
         btnAddCity = findViewById(R.id.btnAddCity);
         etSearchCity = findViewById(R.id.etSearchCity);
         sharedPreferences = getSharedPreferences("USER",MODE_PRIVATE);
+
+
+
+
+
+        settingsPref = this.getSharedPreferences(this.getResources().getString(R.string.settings_preferences_file_key), Context.MODE_PRIVATE);
+        String getUnitPreference = settingsPref.getString(getResources().getString(R.string.settings_unit_key),"F");
+        switch (getUnitPreference){
+            case("F"):
+                isMetric += "false";
+                boolMetric = false;
+                metric="Imperial";
+                break;
+            case "C":
+                boolMetric = true;
+                isMetric += "true";
+        }
+        Log.d("FAVPAGE", isMetric);
+
+
+
 
 
         /**
@@ -97,10 +122,17 @@ public class differentLocations extends AppCompatActivity {
         });
 
 
+
+
+
+
+
         /**
          * Swipe to remove item from location list
          */
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -109,7 +141,6 @@ public class differentLocations extends AppCompatActivity {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 locationsArrayList.remove(viewHolder.getLayoutPosition());
-                Toast.makeText(differentLocations.this,populatCityList.get(viewHolder.getLayoutPosition())+" removed from favourite list",Toast.LENGTH_SHORT).show();
                 populatCityList.remove(viewHolder.getLayoutPosition());
                 adapter.notifyDataSetChanged();
 
@@ -139,16 +170,16 @@ public class differentLocations extends AppCompatActivity {
                         String localTime2 = jName.getJSONObject("TimeZone").getString("Name");
 
                         String key = jName.getString("Key");
-                        String locationURL1 = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY;
+                        String locationURL1 = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY + isMetric;
                         localTime = localTime2;
                         convertToEST(localTime);
 
                         JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL1, null, response1 -> {
                             try {
                                 JSONObject jName1 = response1.getJSONObject(0);
-                                temperature = ((int) Double.parseDouble(jName1.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value"))) + "°";
+                                temperature = ((int) Double.parseDouble(jName1.getJSONObject("Temperature").getJSONObject(metric).getString("Value"))) + "°";
                                 forecastInfo = jName1.getString("WeatherText");
-                                String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY;
+                                String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY + isMetric;
                                 JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, response2 -> {
                                     try {
                                         tempHighest = response2.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");

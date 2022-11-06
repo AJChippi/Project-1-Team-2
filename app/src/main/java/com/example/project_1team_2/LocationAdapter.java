@@ -1,5 +1,8 @@
 package com.example.project_1team_2;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,8 @@ import java.util.ArrayList;
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationViewHolder>{
     ArrayList<Locations> locations;
     Context context;
+    SharedPreferences settingsPref;
+    SharedPreferences.Editor settingsEditor;
 
     public LocationAdapter(ArrayList<Locations> locations,Context context) {
         this.locations = locations;
@@ -61,7 +66,18 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             txtHigh = view.findViewById(R.id.txtHigh);
             txtLow = view.findViewById(R.id.txtLow);
             txtLocalTime = view.findViewById(R.id.txtLocalTime);
+            view.setOnClickListener(view1 -> {
+                Log.d("twefw","Clicked"+txtCityName.getText());
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.putExtra("cityName",txtCityName.getText());
 
+
+//                SharedPreferences.Editor editor = settingsPref.edit();
+//                editor.putString("cityName",txtCityName.getText()+"");
+//                editor.commit();
+
+                context.startActivity(intent);
+            });
         }
     }
 

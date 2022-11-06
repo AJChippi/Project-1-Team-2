@@ -31,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow, txtByHour, txtByDay;
 
-    final String API_KEY = "VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL";
+    final String API_KEY = "3knmwx4pZle8RVL2K78nks9zZ3Jxmlkn";
     //by hour forecast list
     ArrayList<byHour> hourForecast;
     ArrayList<ByDay> byDayForecast;
@@ -73,8 +74,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     boolean getHourPreference=true;
     boolean getDayPreference=true;
 
-
-    String searchName = "";
+    String searchName = "Saginaw";
     String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+ API_KEY + "&q="+(searchName.length()==0?"saginaw":searchName);
 
     String isMetric = "&metric=";
@@ -109,6 +109,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 boolMetric = true;
                 isMetric += "true";
         }
+
+        searchName = settingsPref.getString("SetName", "Saginaw");
+
+
+
+        Intent intent2 = getIntent();
+        if(intent2.getStringExtra("cityName")!=null){
+            searchName = intent2.getStringExtra("cityName");
+            Log.d("SFAAS",searchName);
+
+        }
+        locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+ API_KEY + "&q="+searchName;
+
+
 
         Log.d("MAINPAGE", isMetric);
         getHourPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
@@ -397,5 +411,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             intent.putExtra("longitude", longitude);
             startActivity(intent);
         });
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences.Editor editor = settingsPref.edit();
+        editor.putString("SetName",searchName);
+        editor.commit();
     }
 }
