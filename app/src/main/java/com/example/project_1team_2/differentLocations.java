@@ -43,7 +43,7 @@ public class differentLocations extends AppCompatActivity {
     ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
 
     String searchName = "";
-    final String API_KEY = "kSPG5FqSvf78etEHOrKfFRYnH5JGo62e";
+    final String API_KEY = "ThsTKSVSAVaN3UfEOV6J5LVDPGjPInqY";
     String city;
     String localTime;
     String forecastInfo;
