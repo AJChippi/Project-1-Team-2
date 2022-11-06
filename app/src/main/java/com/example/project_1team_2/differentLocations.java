@@ -43,7 +43,8 @@ public class differentLocations extends AppCompatActivity {
     ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
 
     String searchName = "";
-    final String API_KEY = "kSPG5FqSvf78etEHOrKfFRYnH5JGo62e";
+    final String API_KEY = "cX4hYjZnGaKjK7PUc0Vdoz096m1wJAoQ";
+    String myTag = "MY_APP";
     String city;
     String localTime;
     String forecastInfo;
@@ -81,20 +82,17 @@ public class differentLocations extends AppCompatActivity {
             for (String data : populatCityList) {
             }
         }
-
-
-
-
-
-
-
         populatePolularCities();
 
+
+        /**
+         * Once button clicked,
+         */
         btnAddCity.setOnClickListener(view -> {
             populatCityList.add(String.valueOf(etSearchCity.getText()));
             Log.d("fgfwef", String.valueOf(populatCityList));
-            fetchData(String.valueOf(etSearchCity.getText()));
             Toast.makeText(this,etSearchCity.getText()+" added to favourite list",Toast.LENGTH_SHORT).show();
+            fetchData(String.valueOf(etSearchCity.getText()));
             etSearchCity.setText("");
         });
 
@@ -112,7 +110,6 @@ public class differentLocations extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 locationsArrayList.remove(viewHolder.getLayoutPosition());
                 Toast.makeText(differentLocations.this,populatCityList.get(viewHolder.getLayoutPosition())+" removed from favourite list",Toast.LENGTH_SHORT).show();
-
                 populatCityList.remove(viewHolder.getLayoutPosition());
                 adapter.notifyDataSetChanged();
 
@@ -124,9 +121,10 @@ public class differentLocations extends AppCompatActivity {
     }
 
     /**
+     * This function will fetch data from API and populate data
+     * to the Recycle List.
      *
-     *
-     * @param cityName
+     * @param cityName will pass user input for requested city
      */
     public void fetchData(String cityName) {
         String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=" + API_KEY + "&q=" + (searchName.length() == 0 ? cityName : searchName);
@@ -145,45 +143,35 @@ public class differentLocations extends AppCompatActivity {
                         localTime = localTime2;
                         convertToEST(localTime);
 
+                        JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL1, null, response1 -> {
+                            try {
+                                JSONObject jName1 = response1.getJSONObject(0);
+                                temperature = ((int) Double.parseDouble(jName1.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value"))) + "°";
+                                forecastInfo = jName1.getString("WeatherText");
+                                String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY;
+                                JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, response2 -> {
+                                    try {
+                                        tempHighest = response2.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
+                                        tempLowest = response2.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
+                                        locationsArrayList.add(new Locations(city, localTime, forecastInfo, tempHighest, tempLowest, temperature));
+                                        adapter.notifyDataSetChanged();
 
-                        JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL1, null, new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                try {
-                                    JSONObject jName = response.getJSONObject(0);
-                                    temperature = ((int) Double.parseDouble(jName.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value"))) + "°";
-                                    forecastInfo = jName.getString("WeatherText");
-
-
-                                    Log.d("testing", forecastInfo);
-                                    String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY;
-                                    JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            try {
-                                                tempHighest = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
-                                                tempLowest = response.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
-                                                locationsArrayList.add(new Locations(city, localTime, forecastInfo, tempHighest, tempLowest, temperature));
-                                                adapter.notifyDataSetChanged();
-
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }, error -> Log.d("uyuy", "Error: " + error.getMessage()));
-                                    queue.add(request2);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }, error -> Log.d(myTag, "Error: " + error.getMessage()));
+                                queue.add(request2);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        }, error -> Log.d("uyuy", "onErrorResponse: " + error.getMessage()));
+                        }, error -> Log.d(myTag, "onErrorResponse: " + error.getMessage()));
                         queue.add(request1);
                     } catch (JSONException | ParseException e) {
                         e.printStackTrace();
                     }
                 },
                 error -> {
-                    Log.d("uyuy", error.toString());
+                    Log.d(myTag, error.toString());
                     error.printStackTrace();
                 }
         );
@@ -201,21 +189,18 @@ public class differentLocations extends AppCompatActivity {
         DateTimeFormatter globalFormat = DateTimeFormatter.ofPattern("hh:mma z");
         ZonedDateTime currentISTime = ZonedDateTime.now();
         ZonedDateTime currentETime = currentISTime.withZoneSameInstant(ZoneId.of(timeCode)); //ET Time
-
-        System.out.println(globalFormat.format(currentETime));
         localTime = globalFormat.format(currentETime);
     }
 
 
 
     private void populatePolularCities() {
-
         new Thread(() -> {
             try {
                 for(int i=0;i<populatCityList.size();i++){
                     int finalI = i;
                     runOnUiThread(() -> fetchData(populatCityList.get(finalI)));
-                    Thread.sleep(800);
+                    Thread.sleep(1200);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -230,7 +215,6 @@ public class differentLocations extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(populatCityList);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        Log.d("TETETE",(json));
         editor.putString("Set",json );
         editor.commit();
     }
