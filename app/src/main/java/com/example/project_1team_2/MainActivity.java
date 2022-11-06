@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     ImageButton btnSettings, btnListFavorites;
 
-    TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow;
+    TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow, txtByHour, txtByDay;
 
     final String API_KEY = "VNJ7wu0YO9pEaab65xSSUjGeW2J72jnL";
     //by hour forecast list
@@ -70,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //Shared Preference
     SharedPreferences settingsPref;
 
+    boolean getHourPreference=true;
+    boolean getDayPreference=true;
+
+
     String searchName = "";
     String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+ API_KEY + "&q="+(searchName.length()==0?"saginaw":searchName);
 
@@ -89,6 +93,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         txtDegree = findViewById(R.id.txtDegree);
         txtCondition = findViewById(R.id.txtCondition);
         txtHighToLow = findViewById(R.id.txtHighToLow);
+        txtByHour = findViewById(R.id.txtByHour);
+        txtByDay = findViewById(R.id.txtByDay);
+
+        settingsPref = this.getSharedPreferences(
+                this.getResources().getString(R.string.settings_preferences_file_key), Context.MODE_PRIVATE);
+
+        String getUnitPreference = settingsPref.getString(getResources().getString(R.string.settings_unit_key),"F");
+        switch (getUnitPreference){
+            case("F"):
+                isMetric += "false";
+                boolMetric = false;
+                break;
+            case "C":
+                boolMetric = true;
+                isMetric += "true";
+        }
+
+        Log.d("MAINPAGE", isMetric);
+        getHourPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
+
+
+         getDayPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_day_key),true);
+
 
         settingsPref = this.getSharedPreferences(
                 this.getResources().getString(R.string.settings_preferences_file_key), Context.MODE_PRIVATE);
@@ -190,8 +217,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 txtDegree.setText(temp);
                 txtCondition.setText(weatherText);
                 getHighAndLow(key);
-                getByHourForecast(key);
-                getByDayForecast(key);
+
+
+                if (!getHourPreference) {
+                    txtByHour.setVisibility(View.GONE);
+                    lstByHour.setVisibility(View.GONE);
+                }
+                else{
+                    txtByHour.setVisibility(View.VISIBLE);
+                    lstByHour.setVisibility(View.VISIBLE);
+                    getByHourForecast(key);
+                }
+
+
+                if (!getDayPreference){
+                    txtByDay.setVisibility(View.GONE);
+                    lstByDay.setVisibility(View.GONE);
+                }
+                else{
+                    txtByDay.setVisibility(View.VISIBLE);
+                    lstByDay.setVisibility(View.VISIBLE);
+                    getByDayForecast(key);
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
