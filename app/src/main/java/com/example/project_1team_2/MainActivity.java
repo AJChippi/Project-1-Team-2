@@ -113,32 +113,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d("MAINPAGE", isMetric);
         getHourPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
 
-
          getDayPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_day_key),true);
 
-
-        settingsPref = this.getSharedPreferences(
-                this.getResources().getString(R.string.settings_preferences_file_key), Context.MODE_PRIVATE);
-
-        String getUnitPreference = settingsPref.getString(getResources().getString(R.string.settings_unit_key),"F");
-        switch (getUnitPreference){
-            case("F"):
-                isMetric += "false";
-                boolMetric = false;
-                break;
-            case "C":
-                boolMetric = true;
-                isMetric += "true";
-        }
-
-        Log.d("MAINPAGE", isMetric);
-        boolean getHourPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
-       if (!getHourPreference)
-           lstByHour.setVisibility(View.GONE);
-
-        boolean getDayPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
-        if (!getDayPreference)
-            lstByDay.setVisibility(View.GONE);
 
         //By Hour Forecast
         setUpByHour();
