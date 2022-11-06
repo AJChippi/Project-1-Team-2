@@ -69,8 +69,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //Shared Preference
     SharedPreferences settingsPref;
+
     boolean getHourPreference=true;
     boolean getDayPreference=true;
+
 
     String searchName = "";
     String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+ API_KEY + "&q="+(searchName.length()==0?"saginaw":searchName);
@@ -114,6 +116,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
          getDayPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_day_key),true);
 
+
+        settingsPref = this.getSharedPreferences(
+                this.getResources().getString(R.string.settings_preferences_file_key), Context.MODE_PRIVATE);
+
+        String getUnitPreference = settingsPref.getString(getResources().getString(R.string.settings_unit_key),"F");
+        switch (getUnitPreference){
+            case("F"):
+                isMetric += "false";
+                boolMetric = false;
+                break;
+            case "C":
+                boolMetric = true;
+                isMetric += "true";
+        }
+
+        Log.d("MAINPAGE", isMetric);
+        boolean getHourPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
+       if (!getHourPreference)
+           lstByHour.setVisibility(View.GONE);
+
+        boolean getDayPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
+        if (!getDayPreference)
+            lstByDay.setVisibility(View.GONE);
 
         //By Hour Forecast
         setUpByHour();
@@ -193,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 txtCondition.setText(weatherText);
                 getHighAndLow(key);
 
+
                 if (!getHourPreference) {
                     txtByHour.setVisibility(View.GONE);
                     lstByHour.setVisibility(View.GONE);
@@ -213,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     lstByDay.setVisibility(View.VISIBLE);
                     getByDayForecast(key);
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
