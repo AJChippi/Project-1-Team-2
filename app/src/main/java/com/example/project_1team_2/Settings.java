@@ -2,7 +2,6 @@ package com.example.project_1team_2;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -106,7 +105,7 @@ public class Settings extends AppCompatActivity {
         boolean getHourPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
         refByHourCheckbox.setChecked(getHourPreference);
 
-        boolean getDayPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
+        boolean getDayPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_day_key),true);
         refByDayCheckbox.setChecked(getDayPreference);
     }
 

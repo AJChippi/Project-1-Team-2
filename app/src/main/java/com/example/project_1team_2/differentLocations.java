@@ -46,6 +46,7 @@ public class differentLocations extends AppCompatActivity {
     String searchName = "";
     final String API_KEY = "3knmwx4pZle8RVL2K78nks9zZ3Jxmlkn";
     String myTag = "MY_APP";
+
     String city;
     String localTime;
     String forecastInfo;
