@@ -17,4 +17,11 @@ public class Locations {
         this.temperature = temperature;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 }
