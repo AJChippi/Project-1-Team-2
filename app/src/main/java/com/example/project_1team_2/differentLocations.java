@@ -42,8 +42,9 @@ public class differentLocations extends AppCompatActivity {
     EditText etSearchCity;
     RecyclerView locationList;
     ArrayList<Locations> locationsArrayList;
-    ArrayList<String> favoriteCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris")); //default cities
-    String API_KEY;
+    ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
+
+    final String API_KEY = "HZa9xJE0IBZGTkt7YOi46475a8IOfMY3";
     String myTag = "MY_APP";
     RequestQueue queue;
     LocationAdapter adapter;

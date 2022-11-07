@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     ImageButton btnSettings, btnListFavorites;
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow, txtByHour, txtByDay;
-    final String API_KEY = "W3CMiBIFj9GrNaSPbubHn75l52uv6fzN";
+
+    final String API_KEY = "HZa9xJE0IBZGTkt7YOi46475a8IOfMY3";
 
     //by hour forecast list
     ArrayList<byHour> hourForecast;
@@ -160,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         try {
                             jName = response.getJSONObject(0);
                             String name = jName.getString("LocalizedName");
+                            String state = jName.getJSONObject("AdministrativeArea").getString("LocalizedName");
                             latitude = jName.getJSONObject("GeoPosition").getDouble("Latitude");
                             longitude = jName.getJSONObject("GeoPosition").getDouble("Longitude");
 
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             String key = jName.getString("Key");
 
-                            getWeatherInformation(name, key);
+                            getWeatherInformation(name, state, key);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -188,9 +190,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     /**
      * get all the necessary weather for the given location
      */
-    private void getWeatherInformation(String name, String key) {
+    private void getWeatherInformation(String name, String state, String key) {
         String locationURL = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY + isMetric;
-        txtLocation.setText(name);
+        txtLocation.setText(name + ", " + state);
 
         JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL, null,
                 response1 -> {
