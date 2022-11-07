@@ -76,12 +76,17 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="411dp"
-        android:layout_height="5dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00C52424"
+        android:backgroundTint="#B52323"
         android:indeterminateTint="#FFFFFF"
         android:progressTint="#99FFFFFF"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/txtInfo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
