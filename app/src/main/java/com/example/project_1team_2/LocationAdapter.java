@@ -13,12 +13,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+/**
+ * The type Location adapter.
+ */
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationViewHolder>{
+    /**
+     * The Locations.
+     */
     ArrayList<Locations> locations;
+    /**
+     * The Context.
+     */
     Context context;
+    /**
+     * The Settings pref.
+     */
     SharedPreferences settingsPref;
+    /**
+     * The Settings editor.
+     */
     SharedPreferences.Editor settingsEditor;
 
+    /**
+     * Instantiates a new Location adapter.
+     *
+     * @param locations the locations
+     * @param context   the context
+     */
     public LocationAdapter(ArrayList<Locations> locations,Context context) {
         this.locations = locations;
         this.context = context;
@@ -48,15 +69,41 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         return locations.size();
     }
 
+    /**
+     * The type Location view holder.
+     */
     class LocationViewHolder extends RecyclerView.ViewHolder{
+        /**
+         * The Txt city name.
+         */
         TextView txtCityName;
+        /**
+         * The Txt temperature.
+         */
         TextView txtTemperature;
+        /**
+         * The Txt local time.
+         */
         TextView txtLocalTime;
+        /**
+         * The Txt forcast info.
+         */
         TextView txtForcastInfo;
+        /**
+         * The Txt high.
+         */
         TextView txtHigh;
+        /**
+         * The Txt low.
+         */
         TextView txtLow;
 
 
+        /**
+         * Instantiates a new Location view holder.
+         *
+         * @param view the view
+         */
         public LocationViewHolder(@NonNull View view) {
             super(view);
             txtCityName = view.findViewById(R.id.txtCityName);

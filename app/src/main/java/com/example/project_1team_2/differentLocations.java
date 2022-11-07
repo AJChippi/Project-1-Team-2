@@ -41,30 +41,99 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * The type Different locations.
+ */
 public class differentLocations extends AppCompatActivity {
+    /**
+     * The Progress bar.
+     */
     ProgressBar progressBar;
+    /**
+     * The Btn add city.
+     */
     ImageButton btnAddCity;
+    /**
+     * The Et search city.
+     */
     EditText etSearchCity;
+    /**
+     * The Txt info.
+     */
     TextView txtInfo;
+    /**
+     * The Location list.
+     */
     RecyclerView locationList;
+    /**
+     * The Locations array list.
+     */
     ArrayList<Locations> locationsArrayList;
+    /**
+     * The Populat city list.
+     */
     ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
 
+    /**
+     * The Api key.
+     */
     final String API_KEY = "HZa9xJE0IBZGTkt7YOi46475a8IOfMY3";
+    /**
+     * The My tag.
+     */
     String myTag = "MY_APP";
 
+    /**
+     * The City.
+     */
     String city;
+    /**
+     * The Local time.
+     */
     String localTime;
+    /**
+     * The Forecast info.
+     */
     String forecastInfo;
+    /**
+     * The Temperature.
+     */
     String temperature;
+    /**
+     * The Temp highest.
+     */
     String tempHighest;
+    /**
+     * The Temp lowest.
+     */
     String tempLowest;
+    /**
+     * The Queue.
+     */
     RequestQueue queue;
+    /**
+     * The Adapter.
+     */
     LocationAdapter adapter;
+    /**
+     * The Shared preferences.
+     */
     SharedPreferences sharedPreferences;
+    /**
+     * The Is metric.
+     */
     String isMetric = "&metric=";
+    /**
+     * The Bool metric.
+     */
     boolean boolMetric =false;
+    /**
+     * The Settings pref.
+     */
     SharedPreferences settingsPref;
+    /**
+     * The Metric.
+     */
     String metric="Metric";
 
     @Override
@@ -163,6 +232,7 @@ public class differentLocations extends AppCompatActivity {
      * to the Recycle List.
      *
      * @param cityName will pass user input for requested city
+     * @param index    the index
      */
     public void fetchData(String cityName, int index) {
         String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=" + API_KEY + "&q="+cityName;
@@ -238,6 +308,12 @@ public class differentLocations extends AppCompatActivity {
 
     }
 
+    /**
+     * Convert to est.
+     *
+     * @param timeCode the time code
+     * @throws ParseException the parse exception
+     */
     public void convertToEST(String timeCode) throws ParseException {
         DateTimeFormatter globalFormat = DateTimeFormatter.ofPattern("hh:mma z");
         ZonedDateTime currentISTime = ZonedDateTime.now();

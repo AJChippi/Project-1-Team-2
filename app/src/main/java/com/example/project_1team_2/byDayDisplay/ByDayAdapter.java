@@ -14,24 +14,65 @@ import com.example.project_1team_2.R;
 
 import java.util.ArrayList;
 
+/**
+ * The type By day adapter.
+ */
 public class ByDayAdapter extends RecyclerView.Adapter {
 
+    /**
+     * The By day.
+     */
     ArrayList<ByDay> byDay;
+    /**
+     * The Context.
+     */
     Context context;
 
+    /**
+     * Instantiates a new By day adapter.
+     *
+     * @param byDay   the by day
+     * @param context the context
+     */
     public ByDayAdapter(ArrayList<ByDay> byDay, Context context) {
         this.byDay = byDay;
         this.context = context;
     }
 
+    /**
+     * The type My view holder.
+     */
     class MyViewHolder extends RecyclerView.ViewHolder{
+        /**
+         * The Txt day.
+         */
         TextView txtDay;
+        /**
+         * The Txt progress.
+         */
         TextView txtProgress;
+        /**
+         * The Progress bar precipitation.
+         */
         ProgressBar progressBarPrecipitation;
+        /**
+         * The Txt phrase.
+         */
         TextView txtPhrase;
+        /**
+         * The Txt high low.
+         */
         TextView txtHighLow;
+        /**
+         * The Txt precipitation intensity.
+         */
         TextView txtPrecipitationIntensity;
 
+        /**
+         * Instantiates a new My view holder.
+         *
+         * @param itemView the item view
+         */
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             txtDay = itemView.findViewById(R.id.txtDay);

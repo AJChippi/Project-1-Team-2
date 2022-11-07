@@ -44,40 +44,130 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * The type Main activity.
+ */
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ImageButton btnSettings, btnListFavorites;
+    /**
+     * The Btn settings.
+     */
+    ImageButton btnSettings, /**
+     * The Btn list favorites.
+     */
+    btnListFavorites;
 
-    TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow, txtByHour, txtByDay;
+    /**
+     * The Txt date.
+     */
+    TextView txtDate, /**
+     * The Txt location.
+     */
+    txtLocation, /**
+     * The Txt degree.
+     */
+    txtDegree, /**
+     * The Txt condition.
+     */
+    txtCondition, /**
+     * The Txt high to low.
+     */
+    txtHighToLow, /**
+     * The Txt by hour.
+     */
+    txtByHour, /**
+     * The Txt by day.
+     */
+    txtByDay;
+    /**
+     * The Api key.
+     */
     final String API_KEY = "HZa9xJE0IBZGTkt7YOi46475a8IOfMY3";
 
-    //by hour forecast list
+    /**
+     * The Hour forecast.
+     */
+//by hour forecast list
     ArrayList<byHour> hourForecast;
+    /**
+     * The By day forecast.
+     */
     ArrayList<ByDay> byDayForecast;
+    /**
+     * The By hour adapter.
+     */
     byHourAdapter byHourAdapter;
+    /**
+     * The By day adapter.
+     */
     ByDayAdapter byDayAdapter;
-    // define this somewhere else
+    /**
+     * The Lst by day.
+     */
+// define this somewhere else
     RecyclerView lstByDay;
+    /**
+     * The Lst by hour.
+     */
     RecyclerView lstByHour;
 
+    /**
+     * The Google map.
+     */
     GoogleMap googleMap;
 
+    /**
+     * The Map fragment.
+     */
     SupportMapFragment mapFragment;
+    /**
+     * The Queue.
+     */
     RequestQueue queue;
+    /**
+     * The My tag.
+     */
     String myTag = "MY_APP";
+    /**
+     * The Latitude.
+     */
     double latitude;
+    /**
+     * The Longitude.
+     */
     double longitude;
 
-    //Shared Preference
+    /**
+     * The Settings pref.
+     */
+//Shared Preference
     SharedPreferences settingsPref;
 
+    /**
+     * The Get hour preference.
+     */
     boolean getHourPreference=true;
+    /**
+     * The Get day preference.
+     */
     boolean getDayPreference=true;
 
+    /**
+     * The Search name.
+     */
     String searchName = "Saginaw";
+    /**
+     * The Location url.
+     */
     String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+ API_KEY + "&q="+(searchName.length()==0?"saginaw":searchName);
 
+    /**
+     * The Is metric.
+     */
     String isMetric = "&metric=";
+    /**
+     * The Bool metric.
+     */
     boolean boolMetric =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,9 +248,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         JSONObject jName = null;
                         try {
                             jName = response.getJSONObject(0);
+                            //getting city name
                             String name = jName.getString("LocalizedName");
+                            //getting the city
                             String state = jName.getJSONObject("AdministrativeArea").getString("LocalizedName");
+                            //getting latitude
                             latitude = jName.getJSONObject("GeoPosition").getDouble("Latitude");
+                            //getting longitude
                             longitude = jName.getJSONObject("GeoPosition").getDouble("Longitude");
 
                             // Set map location.
@@ -199,8 +293,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 jName1 = response1.getJSONObject(0);
                 String temp;
                 if (!boolMetric){
+                    //getting F degree
                     temp = ((int) Double.parseDouble(jName1.getJSONObject("Temperature").getJSONObject("Imperial").getString("Value"))) +"°";
                 } else {
+                    //getting C degree
                     temp = ((int) Double.parseDouble(jName1.getJSONObject("Temperature").getJSONObject("Metric").getString("Value"))) +"°";
                 }
 
@@ -247,6 +343,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onResponse(JSONObject response1) {
                 try {
+                    //getting the high and low
                     String high = response1.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
                     String low = response1.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
                     txtHighToLow.setText( "High: "+high + "° - Low: " + low + "°");
@@ -305,6 +402,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     // Loop through and build by hour list.
                     for (int i = 0; i < response.length(); i++) {
                         jName = response.getJSONObject(i);
+                        // gettings value of the temperature
                         String imperial = jName.getJSONObject("Temperature").getString("Value");
                         long epochTime = jName.getLong("EpochDateTime");
                         int weatherIcon = jName.getInt("WeatherIcon");
@@ -331,7 +429,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //THIS
         JsonObjectRequest request4 = new JsonObjectRequest(Request.Method.GET, byDayURL, null, response -> {
             try {
+                //dailyForecasts
                 JSONArray jArray = response.getJSONArray("DailyForecasts");
+                //headlines
                 JSONObject headline = response.getJSONObject("Headline");
                 String headlineText = headline.getString("Text");
 
@@ -339,9 +439,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (int i = 0; i < jArray.length(); i++) {
                     JSONObject jName = jArray.getJSONObject(i);
                     String date = jName.getString("Date");
+                    //high temperature
                     String high = jName.getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
+                    //low temperature
                     String low = jName.getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
+                    //the phrase of the day
                     String phrase = jName.getJSONObject("Day").getString("IconPhrase");
+                    //if it has precipitation
                     Boolean hasPrecipitation = jName.getJSONObject("Day").getBoolean("HasPrecipitation");
 
                     String precipitationProbability = "";
@@ -349,6 +453,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                          precipitationProbability = jName.getJSONObject("Day").getString("PrecipitationIntensity");
                     }
 
+                    //switch case if the API returns light rain the intensity of the rain is 33% and moderate is 66% and heavy is 100%
                     int intensity = 0;
                     switch(precipitationProbability){
                         case "Light":
@@ -373,6 +478,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 byDayAdapter.notifyDataSetChanged();
 
+                //Alert box for the headline
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("HEADLINE");
                 builder.setMessage(headlineText);

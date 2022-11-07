@@ -15,20 +15,52 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+/**
+ * The type By hour adapter.
+ */
 public class byHourAdapter extends RecyclerView.Adapter {
+    /**
+     * The By hour fore cast.
+     */
     ArrayList<byHour> byHourForeCast;
+    /**
+     * The Context.
+     */
     Context context;
 
+    /**
+     * Instantiates a new By hour adapter.
+     *
+     * @param byHourForeCast the by hour fore cast
+     * @param context        the context
+     */
     public byHourAdapter(ArrayList<byHour> byHourForeCast,Context context) {
         this.byHourForeCast = byHourForeCast;
         this.context = context;
     }
 
+    /**
+     * The type My view holder.
+     */
     class MyViewHolder extends RecyclerView.ViewHolder{
+        /**
+         * The Txt time.
+         */
         TextView txtTime;
+        /**
+         * The Txt temp.
+         */
         TextView txtTemp;
+        /**
+         * The Iv weather.
+         */
         ImageView ivWeather;
 
+        /**
+         * Instantiates a new My view holder.
+         *
+         * @param itemView the item view
+         */
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             txtTime = itemView.findViewById(R.id.txtTime);

@@ -17,20 +17,53 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.util.Objects;
 
+/**
+ * The type Settings.
+ */
 public class Settings extends AppCompatActivity {
     private static final String TAG = "Settings";
 
+    /**
+     * The Support action bar.
+     */
     ActionBar supportActionBar;
+    /**
+     * The Back btn.
+     */
     Button backBtn;
+    /**
+     * The Unit toggle group.
+     */
     MaterialButtonToggleGroup unitToggleGroup;
+    /**
+     * The Ref by hour checkbox.
+     */
     CheckBox refByHourCheckbox;
+    /**
+     * The Ref by day checkbox.
+     */
     CheckBox refByDayCheckbox;
 
+    /**
+     * The Settings pref.
+     */
     SharedPreferences settingsPref;
+    /**
+     * The Settings editor.
+     */
     SharedPreferences.Editor settingsEditor;
+    /**
+     * The Unit toggle check listener.
+     */
     MaterialButtonToggleGroup.OnButtonCheckedListener unitToggleCheckListener;
 
+    /**
+     * The Ref by hour change listener.
+     */
     CompoundButton.OnCheckedChangeListener refByHourChangeListener;
+    /**
+     * The Ref by day change listener.
+     */
     CompoundButton.OnCheckedChangeListener refByDayChangeListener;
 
     @Override

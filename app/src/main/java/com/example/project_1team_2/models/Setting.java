@@ -5,12 +5,23 @@ import android.content.SharedPreferences;
 
 import com.example.project_1team_2.R;
 
+/**
+ * The type Setting.
+ */
 public class Setting {
     private String unit;
     private boolean currentLocationUse;
     private boolean refByHour;
     private boolean refByDay;
 
+    /**
+     * Instantiates a new Setting.
+     *
+     * @param unit               the unit
+     * @param currentLocationUse the current location use
+     * @param refByHour          the ref by hour
+     * @param refByDay           the ref by day
+     */
     public Setting(String unit, boolean currentLocationUse, boolean refByHour, boolean refByDay) {
         this.unit = unit;
         this.currentLocationUse = currentLocationUse;
@@ -18,38 +29,84 @@ public class Setting {
         this.refByDay = refByDay;
     }
 
+    /**
+     * Gets unit.
+     *
+     * @return the unit
+     */
     public String getUnit() {
         return unit;
     }
 
+    /**
+     * Sets unit.
+     *
+     * @param unit the unit
+     */
     public void setUnit(String unit) {
         this.unit = unit;
     }
 
+    /**
+     * Is current location use boolean.
+     *
+     * @return the boolean
+     */
     public boolean isCurrentLocationUse() {
         return currentLocationUse;
     }
 
+    /**
+     * Sets current location use.
+     *
+     * @param currentLocationUse the current location use
+     */
     public void setCurrentLocationUse(boolean currentLocationUse) {
         this.currentLocationUse = currentLocationUse;
     }
 
+    /**
+     * Is ref by hour boolean.
+     *
+     * @return the boolean
+     */
     public boolean isRefByHour() {
         return refByHour;
     }
 
+    /**
+     * Sets ref by hour.
+     *
+     * @param refByHour the ref by hour
+     */
     public void setRefByHour(boolean refByHour) {
         this.refByHour = refByHour;
     }
 
+    /**
+     * Is ref by day boolean.
+     *
+     * @return the boolean
+     */
     public boolean isRefByDay() {
         return refByDay;
     }
 
+    /**
+     * Sets ref by day.
+     *
+     * @param refByDay the ref by day
+     */
     public void setRefByDay(boolean refByDay) {
         this.refByDay = refByDay;
     }
 
+    /**
+     * Init settings setting.
+     *
+     * @param ctx the ctx
+     * @return the setting
+     */
     static public Setting initSettings(Context ctx) {
         SharedPreferences settingsPref = ctx.getSharedPreferences(
                 ctx.getResources().getString(R.string.settings_preferences_file_key), Context.MODE_PRIVATE);
