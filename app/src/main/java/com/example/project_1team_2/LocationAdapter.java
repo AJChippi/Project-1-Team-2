@@ -66,16 +66,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             txtHigh = view.findViewById(R.id.txtHigh);
             txtLow = view.findViewById(R.id.txtLow);
             txtLocalTime = view.findViewById(R.id.txtLocalTime);
+
+
             view.setOnClickListener(view1 -> {
                 Log.d("twefw","Clicked"+txtCityName.getText());
                 Intent intent = new Intent(context, MainActivity.class);
                 intent.putExtra("cityName",txtCityName.getText());
-
-
-//                SharedPreferences.Editor editor = settingsPref.edit();
-//                editor.putString("cityName",txtCityName.getText()+"");
-//                editor.commit();
-
                 context.startActivity(intent);
             });
         }

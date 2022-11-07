@@ -10,8 +10,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -35,16 +38,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class differentLocations extends AppCompatActivity {
+    ProgressBar progressBar;
     ImageButton btnAddCity;
     EditText etSearchCity;
+    TextView txtInfo;
     RecyclerView locationList;
     ArrayList<Locations> locationsArrayList;
     ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
 
-    String searchName = "";
-    final String API_KEY = "3knmwx4pZle8RVL2K78nks9zZ3Jxmlkn";
+    final String API_KEY = "e3p4j8eh5xkXkckcHKK7Gc3TeO1M05yo";
     String myTag = "MY_APP";
 
     String city;
@@ -71,8 +77,8 @@ public class differentLocations extends AppCompatActivity {
         btnAddCity = findViewById(R.id.btnAddCity);
         etSearchCity = findViewById(R.id.etSearchCity);
         sharedPreferences = getSharedPreferences("USER",MODE_PRIVATE);
-
-
+        progressBar=findViewById(R.id.progressBar);
+        txtInfo = findViewById(R.id.txtInfo);
 
 
 
@@ -108,7 +114,10 @@ public class differentLocations extends AppCompatActivity {
             for (String data : populatCityList) {
             }
         }
+
         populatePolularCities();
+        txtInfo.setText("Swipe left on location to remove");
+
 
 
         /**
@@ -116,16 +125,12 @@ public class differentLocations extends AppCompatActivity {
          */
         btnAddCity.setOnClickListener(view -> {
             populatCityList.add(String.valueOf(etSearchCity.getText()));
-            Log.d("fgfwef", String.valueOf(populatCityList));
             Toast.makeText(this,etSearchCity.getText()+" added to favourite list",Toast.LENGTH_SHORT).show();
             fetchData(String.valueOf(etSearchCity.getText()));
+            Log.d("asfasfasfas", String.valueOf(locationList.getAdapter().getItemCount()));
+
             etSearchCity.setText("");
         });
-
-
-
-
-
 
 
         /**
@@ -141,10 +146,10 @@ public class differentLocations extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Toast.makeText(getApplicationContext(),"Location removed",Toast.LENGTH_SHORT).show();
                 locationsArrayList.remove(viewHolder.getLayoutPosition());
                 populatCityList.remove(viewHolder.getLayoutPosition());
                 adapter.notifyDataSetChanged();
-
             }
         });
         helper.attachToRecyclerView(locationList);
@@ -159,7 +164,8 @@ public class differentLocations extends AppCompatActivity {
      * @param cityName will pass user input for requested city
      */
     public void fetchData(String cityName) {
-        String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=" + API_KEY + "&q=" + (searchName.length() == 0 ? cityName : searchName);
+        String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=" + API_KEY + "&q="+cityName;
+
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
                 locationURL,
@@ -169,6 +175,7 @@ public class differentLocations extends AppCompatActivity {
                         JSONObject jName = response.getJSONObject(0);
                         city = jName.getString("LocalizedName");
                         String localTime2 = jName.getJSONObject("TimeZone").getString("Name");
+                        Log.d("asfsfaf", city + "\t"+ populatCityList);
 
                         String key = jName.getString("Key");
                         String locationURL1 = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY + isMetric;
@@ -208,13 +215,16 @@ public class differentLocations extends AppCompatActivity {
                 }
         );
 
-        queue.add(request);
 
+        queue.add(request);
 
         adapter = new LocationAdapter(locationsArrayList, this);
         locationList.setAdapter(adapter);
         locationList.setLayoutManager(new LinearLayoutManager(this));
         adapter.notifyDataSetChanged();
+        Log.d("myTagsaf", "onErrorResponse: " + locationsArrayList.size());
+
+
     }
 
     public void convertToEST(String timeCode) throws ParseException {
@@ -227,19 +237,33 @@ public class differentLocations extends AppCompatActivity {
 
 
     private void populatePolularCities() {
-        new Thread(() -> {
-            try {
-                for(int i=0;i<populatCityList.size();i++){
-                    int finalI = i;
-                    runOnUiThread(() -> fetchData(populatCityList.get(finalI)));
-                    Thread.sleep(1200);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
+        ExecutorService executorService = Executors.newCachedThreadPool();
 
+        executorService.submit(() -> {
+
+
+            for(int i=0;i<populatCityList.size();i++){
+                int finalI = i;
+
+
+                    try {
+                        runOnUiThread(()-> fetchData(populatCityList.get(finalI)));
+                        runOnUiThread(()-> txtInfo.setText("Fetching data"));
+                        progressBar.setProgress(progressBar.getProgress()+(100/populatCityList.size()+1));
+                        Thread.sleep(1000);
+
+                        runOnUiThread(()-> txtInfo.setText("Swipe left on location to remove"));
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+            }
+            progressBar.setVisibility(View.INVISIBLE);
+
+
+
+        });
+    }
 
     @Override
     protected void onStop() {
