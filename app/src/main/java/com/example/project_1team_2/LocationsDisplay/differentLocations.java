@@ -47,7 +47,7 @@ public class differentLocations extends AppCompatActivity {
     ArrayList<Locations> locationsArrayList;
     ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
 
-    String API_KEY = "XfoVBzATlyCmTdGkGBOalwGh1GJyQ6YI";
+    String API_KEY = "Rx5owEhq7vzJ6T0xKr5EVwKLaV0Z5qcp";
     String myTag = "MY_APP";
     RequestQueue queue;
     LocationAdapter adapter;

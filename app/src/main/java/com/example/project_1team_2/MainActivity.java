@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow, txtByHour, txtByDay;
 
-    final String API_KEY = "XfoVBzATlyCmTdGkGBOalwGh1GJyQ6YI";
+    final String API_KEY = "Rx5owEhq7vzJ6T0xKr5EVwKLaV0Z5qcp";
 
     //by hour forecast list
     ArrayList<byHour> hourForecast;
