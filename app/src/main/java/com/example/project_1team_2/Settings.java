@@ -50,6 +50,9 @@ public class Settings extends AppCompatActivity {
 
     }
 
+    /**
+     * Add listeners to the toggle buttons
+     */
     private void initCheckListeners() {
         unitToggleCheckListener = (group, checkedId, isChecked) -> {
             String checkedOption;
@@ -82,6 +85,9 @@ public class Settings extends AppCompatActivity {
         refByDayCheckbox.setOnCheckedChangeListener(refByDayChangeListener);
     }
 
+    /**
+     * Initialize the settings from the shared preferences
+     */
     private void initWidgets() {
         backBtn = findViewById(R.id.backBtn);
         unitToggleGroup = findViewById(R.id.unitToggleButton);

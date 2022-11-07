@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         });
 
+        // get location
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
                     locationURL,
                     null,
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
                     },
                     error -> {
-                        txtLocation.setText("Error");
+                        txtLocation.setText("Error, API RAN OUT OF REQUESTS MAKE NEW KEY");
                         Log.d(myTag, error.toString());
                         error.printStackTrace();
                     }
@@ -216,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 getHighAndLow(key);
 
 
+                //setting the visibility of the by hour and by day
                 if (!getHourPreference) {
                     txtByHour.setVisibility(View.GONE);
                     lstByHour.setVisibility(View.GONE);
@@ -355,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                          precipitationProbability = jName.getJSONObject("Day").getString("PrecipitationIntensity");
                     }
 
+                    //switch case so when API returns Light rain it will display 33% on the progess Bar and so on
                     int intensity = 0;
                     switch(precipitationProbability){
                         case "Light":
@@ -379,6 +382,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 byDayAdapter.notifyDataSetChanged();
 
+                //Alert box for the HEADLINE
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("HEADLINE");
                 builder.setMessage(headlineText);

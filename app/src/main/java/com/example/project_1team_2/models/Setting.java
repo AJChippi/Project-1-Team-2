@@ -50,6 +50,11 @@ public class Setting {
         this.refByDay = refByDay;
     }
 
+    /**
+     * @param ctx
+     * @return
+     * getting data from shared preferences
+     */
     static public Setting initSettings(Context ctx) {
         SharedPreferences settingsPref = ctx.getSharedPreferences(
                 ctx.getResources().getString(R.string.settings_preferences_file_key), Context.MODE_PRIVATE);
