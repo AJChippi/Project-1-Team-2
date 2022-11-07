@@ -50,7 +50,7 @@ public class differentLocations extends AppCompatActivity {
     ArrayList<Locations> locationsArrayList;
     ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
 
-    final String API_KEY = "3xQAllwW22tptHIF5iGKyRXZXf0fKWK1";
+    final String API_KEY = "HZa9xJE0IBZGTkt7YOi46475a8IOfMY3";
     String myTag = "MY_APP";
 
     String city;
