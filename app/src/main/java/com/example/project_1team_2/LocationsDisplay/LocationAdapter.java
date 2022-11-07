@@ -1,8 +1,6 @@
-package com.example.project_1team_2;
+package com.example.project_1team_2.LocationsDisplay;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.project_1team_2.MainActivity;
+import com.example.project_1team_2.R;
 
 import java.util.ArrayList;
 
@@ -70,7 +71,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
 
             view.setOnClickListener(view1 -> {
-                Log.d("twefw","Clicked"+txtCityName.getText());
                 Intent intent = new Intent(context, MainActivity.class);
                 intent.putExtra("cityName",txtCityName.getText());
                 context.startActivity(intent);

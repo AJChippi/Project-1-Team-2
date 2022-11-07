@@ -1,4 +1,4 @@
-package com.example.project_1team_2;
+package com.example.project_1team_2.LocationsDisplay;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +20,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.project_1team_2.LocationsDisplay.LocationAdapter;
+import com.example.project_1team_2.LocationsDisplay.Locations;
+import com.example.project_1team_2.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -44,7 +47,7 @@ public class differentLocations extends AppCompatActivity {
     ArrayList<Locations> locationsArrayList;
     ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
 
-    final String API_KEY = "HZa9xJE0IBZGTkt7YOi46475a8IOfMY3";
+    String API_KEY = "XfoVBzATlyCmTdGkGBOalwGh1GJyQ6YI";
     String myTag = "MY_APP";
     RequestQueue queue;
     LocationAdapter adapter;
@@ -84,11 +87,11 @@ public class differentLocations extends AppCompatActivity {
         Gson gson = new Gson();
         String json = sharedPreferences.getString("SavedList", "");
         if (json.isEmpty()) {
-            Log.d(myTag,"No saved cities");
+            Toast.makeText(this, "No saved cities", Toast.LENGTH_SHORT).show();
         } else {
             Type type = new TypeToken<List<String>>() {
             }.getType();
-            favoriteCityList = gson.fromJson(json, type);
+            populatCityList = gson.fromJson(json, type);
         }
 
         //populate cities (saved or default)
@@ -100,7 +103,7 @@ public class differentLocations extends AppCompatActivity {
          * favourite city list.
          */
         btnAddCity.setOnClickListener(view -> {
-            favoriteCityList.add(String.valueOf(etSearchCity.getText()));
+            populatCityList.add(String.valueOf(etSearchCity.getText()));
             locationsArrayList.add(new Locations(etSearchCity.getText() + "", "", "", "", "", "", ""));
             Toast.makeText(this,etSearchCity.getText()+" added to favourite list",Toast.LENGTH_SHORT).show();
             fetchData(String.valueOf(etSearchCity.getText()), locationsArrayList.size() - 1);
@@ -121,7 +124,7 @@ public class differentLocations extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Toast.makeText(getApplicationContext(),"Location removed",Toast.LENGTH_SHORT).show();
                 locationsArrayList.remove(viewHolder.getLayoutPosition());      //removes city from recycle list
-                favoriteCityList.remove(viewHolder.getLayoutPosition());     //removes city from favourite city list
+                populatCityList.remove(viewHolder.getLayoutPosition());     //removes city from favourite city list
                 adapter.notifyDataSetChanged();
             }
         });
@@ -233,15 +236,14 @@ public class differentLocations extends AppCompatActivity {
 
             // Initialize the city list.
             runOnUiThread(() -> {
-                for (String location : favoriteCityList) {
-                    Log.d("testing", location);
+                for (String location : populatCityList) {
                     locationsArrayList.add(new Locations(location, "","", "", "", "", ""));
                 }
             });
 
-            for(int i = 0; i< favoriteCityList.size(); i++){
+            for(int i = 0; i< populatCityList.size(); i++){
                 int finalI = i;
-                runOnUiThread(()-> fetchData(favoriteCityList.get(finalI), finalI));
+                runOnUiThread(()-> fetchData(populatCityList.get(finalI), finalI));
             }
         });
     }
@@ -251,7 +253,7 @@ public class differentLocations extends AppCompatActivity {
         super.onStop();
         //using gson to save arraylist in shared preferences
         Gson gson = new Gson();
-        String json = gson.toJson(favoriteCityList);
+        String json = gson.toJson(populatCityList);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("SavedList",json );
         editor.commit();

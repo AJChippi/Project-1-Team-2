@@ -2,19 +2,15 @@ package com.example.project_1team_2;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-
 import com.example.project_1team_2.models.Setting;
 import com.google.android.material.button.MaterialButtonToggleGroup;
-
 import java.util.Objects;
 
 public class Settings extends AppCompatActivity {
@@ -57,7 +53,6 @@ public class Settings extends AppCompatActivity {
     private void initCheckListeners() {
         unitToggleCheckListener = (group, checkedId, isChecked) -> {
             String checkedOption;
-            Log.d(TAG, "initCheckListeners: id" + checkedId + "; " + R.id.celsiusButton + "; " + R.id.fahrenheitButton);
 
             if(isChecked) {
                 if(checkedId == R.id.celsiusButton) {
@@ -127,15 +122,4 @@ public class Settings extends AppCompatActivity {
         refByHourCheckbox.setChecked(settings.isRefByHour());
         refByDayCheckbox.setChecked(settings.isRefByDay());
     }
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        if(unitToggleCheckListener != null) {
-//            unitToggleGroup.removeOnButtonCheckedListener(unitToggleCheckListener);
-//            unitToggleCheckListener = null;
-//        }
-//        refByHourCheckbox.setOnCheckedChangeListener(null);
-//        refByDayCheckbox.setOnCheckedChangeListener(null);
-//    }
 }

@@ -37,7 +37,7 @@
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".differentLocations"
+            android:name=".LocationsDisplay.differentLocations"
             android:exported="false" />
         <activity
             android:name=".Settings"

@@ -1,3 +1,11 @@
+/**
+ * Authors: Anthony Chippi, Tyler Moody, Binh Dang, Izeyaan Khalid, Rakibul Hassan
+ * API: 33
+ * Oreo 8.0
+ * Description: Weather Application
+ * Phone: Pixel XL
+ */
+
 package com.example.project_1team_2;
 
 import androidx.annotation.NonNull;
@@ -21,6 +29,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.example.project_1team_2.LocationsDisplay.differentLocations;
 import com.example.project_1team_2.byDayDisplay.ByDay;
 import com.example.project_1team_2.byDayDisplay.ByDayAdapter;
 import com.example.project_1team_2.byHourDisplay.byHour;
@@ -31,7 +40,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow, txtByHour, txtByDay;
 
-    final String API_KEY = "HZa9xJE0IBZGTkt7YOi46475a8IOfMY3";
+    final String API_KEY = "XfoVBzATlyCmTdGkGBOalwGh1GJyQ6YI";
 
     //by hour forecast list
     ArrayList<byHour> hourForecast;
@@ -118,14 +126,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent intent2 = getIntent();
         if(intent2.getStringExtra("cityName")!=null){
             searchName = intent2.getStringExtra("cityName");
-            Log.d("SFAAS",searchName);
 
         }
         locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey="+ API_KEY + "&q="+searchName;
 
-
-
-        Log.d("MAINPAGE", isMetric);
         getHourPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_hour_key),true);
 
          getDayPreference = settingsPref.getBoolean(getResources().getString(R.string.settings_reference_by_day_key),true);

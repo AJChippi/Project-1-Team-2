@@ -1,4 +1,4 @@
-package com.example.project_1team_2;
+package com.example.project_1team_2.LocationsDisplay;
 
 public class Locations {
     String city;
