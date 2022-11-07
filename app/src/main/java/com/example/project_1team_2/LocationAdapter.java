@@ -16,8 +16,6 @@ import java.util.ArrayList;
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationViewHolder>{
     ArrayList<Locations> locations;
     Context context;
-    SharedPreferences settingsPref;
-    SharedPreferences.Editor settingsEditor;
 
     public LocationAdapter(ArrayList<Locations> locations,Context context) {
         this.locations = locations;
@@ -40,6 +38,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         holder.txtHigh.setText("H:"+l.highestTemp+"°");
         holder.txtLow.setText("L:"+l.lowestTemp+"°");
         holder.txtLocalTime.setText(l.localTime);
+        holder.txtCountry.setText(l.countryName);
 
     }
 
@@ -52,6 +51,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         TextView txtCityName;
         TextView txtTemperature;
         TextView txtLocalTime;
+        TextView txtCountry;
         TextView txtForcastInfo;
         TextView txtHigh;
         TextView txtLow;
@@ -66,6 +66,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             txtHigh = view.findViewById(R.id.txtHigh);
             txtLow = view.findViewById(R.id.txtLow);
             txtLocalTime = view.findViewById(R.id.txtLocalTime);
+            txtCountry = view.findViewById(R.id.txtCountry);
 
 
             view.setOnClickListener(view1 -> {

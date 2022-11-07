@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     ImageButton btnSettings, btnListFavorites;
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow, txtByHour, txtByDay;
-    final String API_KEY = "3xQAllwW22tptHIF5iGKyRXZXf0fKWK1";
+    final String API_KEY = "W3CMiBIFj9GrNaSPbubHn75l52uv6fzN";
 
     //by hour forecast list
     ArrayList<byHour> hourForecast;
@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnListFavorites.setOnClickListener(view ->{
             // go to favorites page
             Intent intent = new Intent(MainActivity.this, differentLocations.class);
+            intent.putExtra("API_KEY",API_KEY);
             startActivity(intent);
 
         });
