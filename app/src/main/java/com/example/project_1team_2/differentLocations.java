@@ -50,7 +50,7 @@ public class differentLocations extends AppCompatActivity {
     ArrayList<Locations> locationsArrayList;
     ArrayList<String> populatCityList = new ArrayList<>(Arrays.asList("New York", "London", "Paris"));
 
-    final String API_KEY = "e3p4j8eh5xkXkckcHKK7Gc3TeO1M05yo";
+    final String API_KEY = "3xQAllwW22tptHIF5iGKyRXZXf0fKWK1";
     String myTag = "MY_APP";
 
     String city;
@@ -125,8 +125,9 @@ public class differentLocations extends AppCompatActivity {
          */
         btnAddCity.setOnClickListener(view -> {
             populatCityList.add(String.valueOf(etSearchCity.getText()));
+            locationsArrayList.add(new Locations(etSearchCity.getText() + "", "", "", "", "", ""));
             Toast.makeText(this,etSearchCity.getText()+" added to favourite list",Toast.LENGTH_SHORT).show();
-            fetchData(String.valueOf(etSearchCity.getText()));
+            fetchData(String.valueOf(etSearchCity.getText()), locationsArrayList.size() - 1);
             Log.d("asfasfasfas", String.valueOf(locationList.getAdapter().getItemCount()));
 
             etSearchCity.setText("");
@@ -163,10 +164,10 @@ public class differentLocations extends AppCompatActivity {
      *
      * @param cityName will pass user input for requested city
      */
-    public void fetchData(String cityName) {
+    public void fetchData(String cityName, int index) {
         String locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search?apikey=" + API_KEY + "&q="+cityName;
 
-
+        Log.d("testing", "start of fetch: " + cityName);
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,
                 locationURL,
                 null,
@@ -179,20 +180,30 @@ public class differentLocations extends AppCompatActivity {
 
                         String key = jName.getString("Key");
                         String locationURL1 = "https://dataservice.accuweather.com/currentconditions/v1/" + key + "?apikey=" + API_KEY + isMetric;
-                        localTime = localTime2;
+                        String localTime = localTime2;
                         convertToEST(localTime);
 
                         JsonArrayRequest request1 = new JsonArrayRequest(Request.Method.GET, locationURL1, null, response1 -> {
                             try {
                                 JSONObject jName1 = response1.getJSONObject(0);
-                                temperature = ((int) Double.parseDouble(jName1.getJSONObject("Temperature").getJSONObject(metric).getString("Value"))) + "°";
-                                forecastInfo = jName1.getString("WeatherText");
+                                String temperature = ((int) Double.parseDouble(jName1.getJSONObject("Temperature").getJSONObject(metric).getString("Value"))) + "°";
+                                String forecastInfo = jName1.getString("WeatherText");
                                 String url = "https://dataservice.accuweather.com/forecasts/v1/daily/1day/" + key + "?apikey=" + API_KEY + isMetric;
                                 JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null, response2 -> {
                                     try {
                                         tempHighest = response2.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Maximum").getString("Value");
                                         tempLowest = response2.getJSONArray("DailyForecasts").getJSONObject(0).getJSONObject("Temperature").getJSONObject("Minimum").getString("Value");
-                                        locationsArrayList.add(new Locations(city, localTime, forecastInfo, tempHighest, tempLowest, temperature));
+
+                                        // Update location info
+                                        Log.d("testing", index + "");
+                                        Locations location = locationsArrayList.get(index);
+                                        Log.d("testing", location.city);
+                                        Log.d("testing", temperature);
+                                        location.localTime = localTime;
+                                        location.forecastInfo = forecastInfo;
+                                        location.highestTemp = tempHighest;
+                                        location.lowestTemp = tempLowest;
+                                        location.temperature = temperature;
                                         adapter.notifyDataSetChanged();
 
                                     } catch (JSONException e) {
@@ -235,28 +246,32 @@ public class differentLocations extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Populate the list of cities for the favorite city view.
+     */
     private void populatePolularCities() {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         executorService.submit(() -> {
 
+            // Initialize the city list.
+            runOnUiThread(() -> {
+                for (String location : populatCityList) {
+                    Log.d("testing", location);
+                    locationsArrayList.add(new Locations(location, "", "", "", "", ""));
+                }
+            });
 
             for(int i=0;i<populatCityList.size();i++){
                 int finalI = i;
 
 
-                    try {
-                        runOnUiThread(()-> fetchData(populatCityList.get(finalI)));
-                        runOnUiThread(()-> txtInfo.setText("Fetching data"));
-                        progressBar.setProgress(progressBar.getProgress()+(100/populatCityList.size()+1));
-                        Thread.sleep(1000);
+                runOnUiThread(()-> fetchData(populatCityList.get(finalI), finalI));
+                runOnUiThread(()-> txtInfo.setText("Fetching data"));
+                progressBar.setProgress(progressBar.getProgress()+(100/populatCityList.size()+1));
 
-                        runOnUiThread(()-> txtInfo.setText("Swipe left on location to remove"));
+                runOnUiThread(()-> txtInfo.setText("Swipe left on location to remove"));
 
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
             }
             progressBar.setVisibility(View.INVISIBLE);
 

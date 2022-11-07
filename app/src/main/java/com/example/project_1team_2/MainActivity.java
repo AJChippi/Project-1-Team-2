@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     ImageButton btnSettings, btnListFavorites;
 
     TextView txtDate, txtLocation, txtDegree, txtCondition, txtHighToLow, txtByHour, txtByDay;
-    final String API_KEY = "3knmwx4pZle8RVL2K78nks9zZ3Jxmlkn";
+    final String API_KEY = "3xQAllwW22tptHIF5iGKyRXZXf0fKWK1";
 
     //by hour forecast list
     ArrayList<byHour> hourForecast;
